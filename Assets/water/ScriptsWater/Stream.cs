@@ -75,32 +75,42 @@ public class Stream : MonoBehaviour
         RaycastHit hit;
         Ray ray = new Ray(transform.position, Vector3.down);
 
+        float pourAmount = Time.deltaTime * 10f;
+        List<MixtureIngredient> drainedIngredients;
+
         Bottle sourceBottle = GetComponentInParent<Bottle>();
 
         if (sourceBottle != null)
         {
-            // Visada nuleidziam skysti — net jei nieko nepasiekia
-            float pourAmount = Time.deltaTime * 10f;
-            List<MixtureIngredient> drainedIngredients = sourceBottle.DrainLiquid(pourAmount);
-
-            // Jei pataikom i buteli — perpilam skysti su ingredientais
-            if (Physics.Raycast(ray, out hit, 2.0f))
+            // Jei pila is butelio — naudojam jo ingredientus
+            drainedIngredients = sourceBottle.DrainLiquid(pourAmount);
+        }
+        else
+        {
+            // Jei pila iš kriaukles
+            drainedIngredients = new List<MixtureIngredient>
             {
-                Bottle targetBottle = hit.collider.GetComponent<Bottle>();
+                new MixtureIngredient("H2O", Color.blue, pourAmount)
+            };
+        }
 
-                if (targetBottle != null)
-                {
-                    targetBottle.AddLiquid(pourAmount, drainedIngredients);
-                }
+        // Jei pataikom i buteli — perpilam skysti su ingredientais
+        if (Physics.Raycast(ray, out hit, 2.0f))
+        {
+            Bottle targetBottle = hit.collider.GetComponent<Bottle>();
 
-                return hit.point;
+            if (targetBottle != null)
+            {
+                // Paskirtam buteliui pridedam ingredientus (is butelio arba kriaukles)
+                targetBottle.AddLiquid(pourAmount, drainedIngredients);
             }
+
+            return hit.point;
         }
 
         // Jeigu nieko nepasiekia, srove vis tiek bega
         return ray.GetPoint(2.0f);
     }
-
 
     private void MoveToPosition(int index, Vector3 targetPosition)
     {
