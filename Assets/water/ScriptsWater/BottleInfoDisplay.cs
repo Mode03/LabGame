@@ -3,9 +3,9 @@ using TMPro;
 
 public class BottleInfoDisplay : MonoBehaviour
 {
-    public Camera playerCamera; // Žaid?jo kamera
-    public float maxDistance = 5f; // Maksimalus atstumas iki m?gintuv?lio
-    public GameObject infoPanel; // UI panel?
+    public Camera playerCamera; // Žaidejo kamera
+    public float maxDistance = 5f; // Maksimalus atstumas iki megintuvelio
+    public GameObject infoPanel; // UI panel
     public TextMeshProUGUI infoText; // UI tekstas
 
     private void Update()
@@ -13,20 +13,20 @@ public class BottleInfoDisplay : MonoBehaviour
         Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        // Tikrinam, ar ži?ri ? objekt? su "Bottle" scriptu
+        // Tikrinam, ar ziuri i objekta su "Bottle" scriptu
         if (Physics.Raycast(ray, out hit, maxDistance))
         {
             Bottle bottle = hit.collider.GetComponent<Bottle>();
 
             if (bottle != null)
             {
-                // Jei pataikom ? butel? — rodom informacij?
+                // Jei pataikom i buteli — rodom info
                 ShowBottleInfo(bottle);
                 return;
             }
         }
 
-        // Jei nieko nerandam — paslepiam lentel?
+        // Jei nieko nerandam — paslepiam lentele
         infoPanel.SetActive(false);
     }
 
@@ -50,7 +50,7 @@ public class BottleInfoDisplay : MonoBehaviour
     {
         infoPanel.SetActive(true);
 
-        string info = $"**Megintuvelis:**\n";
+        string info = $"**Megintuvelis**\n";
         info += $"Kiekis: {bottle.currentVolume}/{bottle.maxVolume} ml\n";
 
         foreach (var ingredient in bottle.ingredients)
@@ -60,7 +60,7 @@ public class BottleInfoDisplay : MonoBehaviour
 
         infoText.text = info;
 
-        // Pakei?iam pozicij? šalia ži?rimo objekto
+        // Pakeiciam pozicija salia ziurimo objekto
         Vector3 screenPos = playerCamera.WorldToScreenPoint(bottle.transform.position);
         infoPanel.transform.position = new Vector3(screenPos.x + 200, screenPos.y, screenPos.z);
     }
