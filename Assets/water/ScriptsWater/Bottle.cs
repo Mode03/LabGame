@@ -20,7 +20,7 @@ public class MixtureIngredient
 public class Bottle : MonoBehaviour
 {
     public float maxVolume = 100f;
-    public float currentVolume = 30f;
+    public float currentVolume = 0f;
 
     public List<MixtureIngredient> ingredients = new List<MixtureIngredient>();
 
@@ -45,14 +45,27 @@ public class Bottle : MonoBehaviour
         }
 
         // pradiniai ingredientai
-        ingredients.Add(new MixtureIngredient("H2O", Color.blue, currentVolume));
+        //ingredients.Add(new MixtureIngredient("H2O", Color.blue, 30));
         UpdateLiquidAppearance();
     }
 
     private void UpdateLiquidAppearance()
     {
-        // Atnaujina skyscio lygi
-        float fillAmount = Mathf.Lerp(-0.03f, 0.25f, currentVolume / maxVolume);
+        float fillAmount;
+
+        if (currentVolume <= 0)
+        {
+            fillAmount = -0.5f; // Tuscias buteliukas
+        }
+        else if (currentVolume > 0 && liquidMaterial.GetFloat("_Fill") == -0.5f)
+        {
+            fillAmount = -0.03f; // Jei tik pradedam pildyti, nustatom i pradine reiksme
+        }
+        else
+        {
+            fillAmount = Mathf.Lerp(-0.03f, 0.25f, currentVolume / maxVolume);
+        }
+
         liquidMaterial.SetFloat("_Fill", fillAmount);
 
         // Apskaiciuoja misinio spalva pagal visus ingredientus
@@ -126,7 +139,7 @@ public class Bottle : MonoBehaviour
         currentVolume -= amount;
         UpdateLiquidAppearance();
 
-        // Jei skyscio nebera — grazinam tuscia saras?
+        // Jei skyscio nebera — grazinam tuscia sarasa
         if (currentVolume <= 0)
         {
             currentVolume = 0;
