@@ -30,11 +30,6 @@ public class DummyCollision : MonoBehaviour
         {
             print("EXIT");
         }
-
-        //dsaaa
-
-        obj.transform.position = endPos;
-        obj.transform.rotation = endRot;
-     
+        
     }
 }
