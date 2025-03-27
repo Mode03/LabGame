@@ -29,11 +29,6 @@ public class PourDetector : MonoBehaviour
         }
     }
 
-    public bool IsPouring()
-    {
-        return isPouring;
-    }
-
     private void StartPour()
     {
         Debug.Log("Start");
