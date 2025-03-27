@@ -61,6 +61,7 @@ public class DummyCollision : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+        //dsaaa
 
         obj.transform.position = endPos;
         obj.transform.rotation = endRot;
