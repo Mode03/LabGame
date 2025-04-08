@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 4102947957111560848}
   - component: {fileID: 129463932994129522}
   m_Layer: 0
-  m_Name: Beaker water
+  m_Name: Beaker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

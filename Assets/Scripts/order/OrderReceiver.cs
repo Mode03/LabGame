@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using NUnit.Framework;
 using System.Collections.Generic;
+using GLTFast.Schema;
 
 public class OrderReceiver : MonoBehaviour
 {
@@ -26,6 +27,11 @@ public class OrderReceiver : MonoBehaviour
         {
             GenerateOrder();
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CheckHeldBottle();
+        }
     }
 
     private void CheckForOrderPoint()
@@ -47,8 +53,12 @@ public class OrderReceiver : MonoBehaviour
         isLookingAtOrderPoint = false;
     }
 
+    public Dictionary<string, float> currentOrderData = new(); // ingredientas -> kiekis
+
     private void GenerateOrder()
     {
+        currentOrderData.Clear();
+
         string[] ingredients = { "H2O", "skibidi", "toilet", "sigma", "boy", "chad" };
         int ingredientCount = Random.Range(2, 6); // 2 iki 5 ingridientu
 
@@ -85,9 +95,59 @@ public class OrderReceiver : MonoBehaviour
         for (int i = 0; i < chosenIngredients.Count;  i++)
         {
             orderText += $"- {chosenIngredients[i]}: {amounts[i]:F0}ml\n";
+            currentOrderData.Add(chosenIngredients[i], amounts[i]);
         }
 
         currentOrder = orderText;
         orderDisplayUI.text = currentOrder;
     }
+
+    private void CheckHeldBottle()
+    {
+        Bottle bottle = GetHeldBottle();
+        if (bottle == null)
+        {
+            Debug.Log("Objektas neturi 'Bottle' skripto!");
+            return;
+        }
+
+        if (IsBottleCorrect(bottle))
+        {
+            Debug.Log("Atitinka uzsakyma!");
+        }
+        else
+        {
+            Debug.Log("Neatitinka uzsakymo!");
+        }
+    }
+
+    private bool IsBottleCorrect(Bottle bottle)
+    {
+        if (bottle.ingredients.Count != currentOrderData.Count)
+            return false;
+
+        foreach (var orderIngredient in currentOrderData)
+        {
+            var found = bottle.ingredients.Find(i => i.name == orderIngredient.Key);
+            if (found == null)
+                return false;
+
+            float diff = Mathf.Abs(found.amount - orderIngredient.Value);
+            if (diff > 5f)
+                return false;
+        }
+
+        return true;
+    }
+
+    private Bottle GetHeldBottle()
+    {
+        if (PlayerHeldObject.currentHeldObject != null)
+        {
+            return PlayerHeldObject.currentHeldObject.GetComponent<Bottle>();
+        }
+
+        return null;
+    }
+
 }
