@@ -50,8 +50,8 @@ public class BottleInfoDisplay : MonoBehaviour
     {
         infoPanel.SetActive(true);
 
-        string info = $"**Megintuvelis**\n";
-        info += $"Kiekis: {bottle.currentVolume}/{bottle.maxVolume} ml\n";
+        string info = $"**Test-Tube**\n";
+        info += $"Amount: {bottle.currentVolume}/{bottle.maxVolume} ml\n";
 
         foreach (var ingredient in bottle.ingredients)
         {

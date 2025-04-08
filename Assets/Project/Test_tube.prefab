@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 7030724371759116908}
   - component: {fileID: 7794862065450495767}
   m_Layer: 0
-  m_Name: Glass_Lab_test_tube with liquid
+  m_Name: Test_tube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

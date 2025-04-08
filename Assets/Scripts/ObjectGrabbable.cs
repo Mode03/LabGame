@@ -32,6 +32,8 @@ public class ObjectGrabbable : MonoBehaviour
             objectRigidbody.useGravity = false;
             //objectRigidbody.isKinematic = true;
 
+            PlayerHeldObject.currentHeldObject = this.gameObject; // isimename, kas laikoma
+
             // Gauti objekto dabartinę rotaciją Euler kampais
             Vector3 currentRotation = transform.eulerAngles;
         }
@@ -42,6 +44,8 @@ public class ObjectGrabbable : MonoBehaviour
         this.objectGrabPointTransform = null;
         objectRigidbody.useGravity = true;
         //objectRigidbody.isKinematic = false;
+
+        PlayerHeldObject.currentHeldObject = null; // atlaisvinam
     }
 
     private void RotateObject()
