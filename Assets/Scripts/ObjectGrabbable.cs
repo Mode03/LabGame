@@ -34,9 +34,6 @@ public class ObjectGrabbable : MonoBehaviour
 
             // Gauti objekto dabartinę rotaciją Euler kampais
             Vector3 currentRotation = transform.eulerAngles;
-
-            // Išspausdinti kampus į konsolę
-            Debug.Log("Object Rotation - X: " + currentRotation.x + ", Y: " + currentRotation.y + ", Z: " + currentRotation.z);
         }
     }
 
@@ -49,8 +46,8 @@ public class ObjectGrabbable : MonoBehaviour
 
     private void RotateObject()
     {
-        if (Input.GetKey(KeyCode.R))
-        {
+        //if (Input.GetKey(KeyCode.R))
+        //{
             // Gauti objekto dabartinę rotaciją Euler kampais 
             Vector3 currentRotation = transform.eulerAngles;
 
@@ -78,7 +75,7 @@ public class ObjectGrabbable : MonoBehaviour
             // Combine both rotations
             Quaternion finalRotation = Quaternion.Euler(0, smoothedY, smoothedZ);
             objectRigidbody.MoveRotation(finalRotation);
-        }
+        //}
     }
 
     private void FixedUpdate()
