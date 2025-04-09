@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "pvp.sln"
+    "dotnet.defaultSolution": "LabGame.sln"
 }
