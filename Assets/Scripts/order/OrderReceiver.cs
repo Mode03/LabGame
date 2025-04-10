@@ -15,7 +15,7 @@ public class OrderReceiver : MonoBehaviour
     private string currentOrder;
     public bool orderActive = false;
 
-    public OrderNPC npcMovement;
+    //public OrderNPC npcMovement;
 
     void Start()
     {
@@ -33,10 +33,10 @@ public class OrderReceiver : MonoBehaviour
                 GenerateOrder();
                 orderActive = true;
 
-                if (npcMovement != null) // npc iseina
-                {
-                    npcMovement.GiveOrder();
-                }
+                //if (npcMovement != null) // npc iseina
+                //{
+                //    npcMovement.GiveOrder();
+                //}
             }
         }
 
