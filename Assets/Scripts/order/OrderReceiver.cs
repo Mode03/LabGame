@@ -7,7 +7,7 @@ using GLTFast.Schema;
 
 public class OrderReceiver : MonoBehaviour
 {
-    public GameObject orderTextUI;  // „Take Order [E]“
+    public GameObject orderTextUI;  // â€žTake Order [E]â€œ
     public TMP_Text orderDisplayUI; // order info
     public Transform playerCamera;  // zaidejo kamera
 
@@ -15,7 +15,8 @@ public class OrderReceiver : MonoBehaviour
     private string currentOrder;
     public bool orderActive = false;
 
-    //public OrderNPC npcMovement;
+
+    public OrderNPC npcMovement;
 
     void Start()
     {
@@ -32,11 +33,12 @@ public class OrderReceiver : MonoBehaviour
             {
                 GenerateOrder();
                 orderActive = true;
+                
+                if (npcMovement != null) // npc iseina
+                {
+                    npcMovement.GiveOrder();
+                }
 
-                //if (npcMovement != null) // npc iseina
-                //{
-                //    npcMovement.GiveOrder();
-                //}
             }
         }
 
@@ -46,7 +48,7 @@ public class OrderReceiver : MonoBehaviour
         }
     }
 
-    private void CheckForOrderPoint()
+    public void CheckForOrderPoint()
     {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hit;
@@ -141,7 +143,7 @@ public class OrderReceiver : MonoBehaviour
         orderDisplayUI.text = "";
         orderActive = false; // Uzsakymas baigtas, leidziam nauja NPC
 
-       // npcMovement.ResetNPC(); // NPC grizta i pradzia
+        npcMovement.ResetNPC(); // NPC grizta i pradzia
     }
 
     private bool IsBottleCorrect(Bottle bottle)
