@@ -118,6 +118,12 @@ public class OrderReceiver : MonoBehaviour
 
     public void CheckHeldBottle()
     {
+        if (!orderActive || currentOrderData.Count == 0)
+        {
+            Debug.Log("Nėra aktyvaus užsakymo!");
+            return;
+        }
+
         Bottle bottle = GetHeldBottle();
         if (bottle == null)
         {
