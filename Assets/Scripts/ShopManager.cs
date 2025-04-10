@@ -11,6 +11,7 @@ public class ShopManager : MonoBehaviour
    public ShopTemplate[] ShopPanels;
    public Button[] BuyButton;
    public ShopTrigger shopTrigger; // Reference to ShopTrigger
+   public Transform spawnPoint;
 
     public void Exit()
     {
@@ -54,14 +55,40 @@ public class ShopManager : MonoBehaviour
     }
    }
    public void purchaseItem(int btnNo)
-   {
-        if(coins >= ShopItems[btnNo].price)
+{
+    if (coins >= ShopItems[btnNo].price)
+    {
+        coins -= ShopItems[btnNo].price;
+        coinUI.text = "Coins: " + coins.ToString();
+        SpawnSpiceItem(btnNo);
+        CheckPurchase();
+    }
+}
+
+void SpawnSpiceItem(int btnNo)
+{
+    Spicies selectedSpice = ShopItems[btnNo];
+
+    if (selectedSpice.Prefab != null && spawnPoint != null)
+    {
+        GameObject spiceObj = Instantiate(selectedSpice.Prefab, spawnPoint.position, spawnPoint.rotation);
+        
+        // Try to get the behavior script and assign the ingredient
+        SpiceBehavior behavior = spiceObj.GetComponent<SpiceBehavior>();
+        if (behavior != null)
         {
-            coins = coins - ShopItems[btnNo].price;
-             coinUI.text = "Coins: " + coins.ToString();
-             CheckPurchase();
+            behavior.Initialize(selectedSpice.item);
         }
-   }
+        else
+        {
+            Debug.LogWarning("Spice prefab does not have a SpiceBehavior script attached.");
+        }
+    }
+    else
+    {
+        Debug.LogWarning("Missing prefab or spawn point for spice item!");
+    }
+}
    public void LoadPanels()
    {
         for(int i = 0; i < ShopItems.Length;i++)

@@ -18,3 +18,4 @@ MonoBehaviour:
     name: pepper
     color: {r: 0, g: 0, b: 0, a: 0}
     amount: 30
+  Prefab: {fileID: 5399374552668760634, guid: b1f8a1234b97dd745b9ea25b3d4d3ceb, type: 3}
