@@ -42,10 +42,10 @@ public class OrderReceiver : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CheckHeldBottle();
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    CheckHeldBottle();
+        //}
     }
 
     public void CheckForOrderPoint()
