@@ -7,13 +7,14 @@ using GLTFast.Schema;
 
 public class OrderReceiver : MonoBehaviour
 {
-    public GameObject orderTextUI;  // „Take Order [E]“
+    public GameObject orderTextUI;  // â€žTake Order [E]â€œ
     public TMP_Text orderDisplayUI; // order info
     public Transform playerCamera;  // zaidejo kamera
 
     private bool isLookingAtOrderPoint = false;
     private string currentOrder;
     public bool orderActive = false;
+
 
     public OrderNPC npcMovement;
 
@@ -32,11 +33,12 @@ public class OrderReceiver : MonoBehaviour
             {
                 GenerateOrder();
                 orderActive = true;
-
+                
                 if (npcMovement != null) // npc iseina
                 {
                     npcMovement.GiveOrder();
                 }
+
             }
         }
 
@@ -46,7 +48,7 @@ public class OrderReceiver : MonoBehaviour
         }
     }
 
-    private void CheckForOrderPoint()
+    public void CheckForOrderPoint()
     {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         RaycastHit hit;
@@ -104,7 +106,7 @@ public class OrderReceiver : MonoBehaviour
 
         // Surenkam teksta
         string orderText = "Order:\n";
-        for (int i = 0; i < chosenIngredients.Count;  i++)
+        for (int i = 0; i < chosenIngredients.Count; i++)
         {
             orderText += $"- {chosenIngredients[i]}: {amounts[i]:F0}ml\n";
             currentOrderData.Add(chosenIngredients[i], amounts[i]);
@@ -114,7 +116,7 @@ public class OrderReceiver : MonoBehaviour
         orderDisplayUI.text = currentOrder;
     }
 
-    private void CheckHeldBottle()
+    public void CheckHeldBottle()
     {
         Bottle bottle = GetHeldBottle();
         if (bottle == null)
