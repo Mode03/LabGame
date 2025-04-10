@@ -13,6 +13,9 @@ public class OrderReceiver : MonoBehaviour
 
     private bool isLookingAtOrderPoint = false;
     private string currentOrder;
+    public bool orderActive = false;
+
+    public OrderNPC npcMovement;
 
     void Start()
     {
@@ -25,7 +28,16 @@ public class OrderReceiver : MonoBehaviour
 
         if (isLookingAtOrderPoint && Input.GetKeyDown(KeyCode.E))
         {
-            GenerateOrder();
+            if (!orderActive) // Tik jeigu nera aktyvaus uzsakymo
+            {
+                GenerateOrder();
+                orderActive = true;
+
+                if (npcMovement != null) // npc iseina
+                {
+                    npcMovement.GiveOrder();
+                }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -114,11 +126,22 @@ public class OrderReceiver : MonoBehaviour
         if (IsBottleCorrect(bottle))
         {
             Debug.Log("Atitinka uzsakyma!");
+            CompleteOrder();
         }
         else
         {
             Debug.Log("Neatitinka uzsakymo!");
         }
+    }
+
+    private void CompleteOrder()
+    {
+        currentOrderData.Clear();
+        currentOrder = "";
+        orderDisplayUI.text = "";
+        orderActive = false; // Uzsakymas baigtas, leidziam nauja NPC
+
+        npcMovement.ResetNPC(); // NPC grizta i pradzia
     }
 
     private bool IsBottleCorrect(Bottle bottle)
