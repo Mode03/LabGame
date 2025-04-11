@@ -6,7 +6,7 @@ public class DummyCollision : MonoBehaviour
 {
     public GameObject target;
     public Rig headRig;
-
+    public Animator dummyAnimator; // Assign this via Inspector
 
     public MultiAimConstraint headAimConstraint;
     public MultiAimConstraint moveHeadConstraint;
@@ -56,6 +56,9 @@ public class DummyCollision : MonoBehaviour
 
             if (moveCoroutine != null) StopCoroutine(moveCoroutine);
             moveCoroutine = StartCoroutine(GiveItemSequence());
+
+            // Start fall trigger coroutine
+            StartCoroutine(TriggerFallAfterDelay(7f));
         }
     }
 
@@ -96,7 +99,7 @@ public class DummyCollision : MonoBehaviour
         yield return new WaitForSeconds(0.0f);
         yield return StartCoroutine(MoveTarget(target, holdPosition, holdRotation));
 
-        // Automatically reset after 5 seconds
+        // Automatically reset arm pose after 3.5 seconds
         if (resetCoroutine != null) StopCoroutine(resetCoroutine);
         resetCoroutine = StartCoroutine(ResetAfterDelay(3.5f));
     }
@@ -105,7 +108,7 @@ public class DummyCollision : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        Debug.Log("Auto-reset after 5 seconds");
+        Debug.Log("Auto-reset arm after 3.5 seconds");
 
         if (moveCoroutine != null) StopCoroutine(moveCoroutine);
         moveCoroutine = StartCoroutine(MoveTarget(target, inactivePosition, inactiveRotation));
@@ -115,6 +118,52 @@ public class DummyCollision : MonoBehaviour
 
         hasGivenItem = false;
     }
+
+    IEnumerator TriggerFallAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (dummyAnimator != null)
+        {
+            Debug.Log("Triggering fall animation");
+
+            dummyAnimator.applyRootMotion = true; // <— Option A: turn on for fall
+
+            dummyAnimator.SetTrigger("FallTrigger");
+
+            // OPTIONAL: Wait and then lower dummy manually (Option B alternative)
+            // yield return new WaitForSeconds(0.5f);
+            // transform.position += Vector3.down * 0.5f;
+        }
+
+        // Then schedule reset
+        StartCoroutine(ResetToStandAfterDelay(10f));
+    }
+
+
+    IEnumerator ResetToStandAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (dummyAnimator != null)
+        {
+            Debug.Log("Resetting to Stand animation");
+
+            // Prevent animations from overriding position
+            dummyAnimator.applyRootMotion = false;
+
+            // Reset to "Stand" state
+            dummyAnimator.CrossFade("Stand", 0.2f);
+        }
+
+        // Reset the dummy's transform manually
+        Debug.Log("Resetting dummy transform to default position/rotation/scale");
+
+        transform.position = new Vector3(54.515f, 0.234f, 22.621f);
+        transform.rotation = new Quaternion(0f, -0.9996081f, 0f, 0.02799418f);
+        transform.localScale = new Vector3(1.7867f, 1.7867f, 1.7867f);
+    }
+
 
     IEnumerator MoveTarget(GameObject obj, Vector3 endPos, Quaternion endRot)
     {
