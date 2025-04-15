@@ -28,10 +28,10 @@ public class DoorInteractor : MonoBehaviour
             if (door != null)
             {
                 currentDoor = door;
-                interactionText.text = "Press [E]";
+                interactionText.text = "Press [Q]";
                 interactionText.gameObject.SetActive(true);
 
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
                     door.ToggleDoor();
                 }

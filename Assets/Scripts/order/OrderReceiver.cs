@@ -15,13 +15,83 @@ public class OrderReceiver : MonoBehaviour
     private string currentOrder;
     public bool orderActive = false;
 
+    private List<Potion> potions = new List<Potion>();
 
     public OrderNPC npcMovement;
 
     void Start()
     {
         orderTextUI.SetActive(false);
+
+        potions.Add(new Potion("GigaGoofy Mix", new Dictionary<string, float> {
+            { "skibidi", 30f },
+            { "boy", 25f },
+            { "toilet", 30f },
+            { "H2O", 10f }
+        }, PotionRarity.Common));
+
+        potions.Add(new Potion("Toilet Rage Serum", new Dictionary<string, float> {
+            { "toilet", 40f },
+            { "skibidi", 30f },
+            { "rot", 25f }
+        }, PotionRarity.Common));
+
+        potions.Add(new Potion("NPC Whisper Brew", new Dictionary<string, float> {
+            { "rot", 30f },
+            { "toilet", 30f },
+            { "H2O", 30f }
+        }, PotionRarity.Common));
+
+        potions.Add(new Potion("Skibidi Brain Melter", new Dictionary<string, float> {
+            { "skibidi", 33f },
+            { "boy", 28f },
+            { "chad", 35f }
+        }, PotionRarity.Rare));
+
+        potions.Add(new Potion("Chad Flex Elixir", new Dictionary<string, float> {
+            { "chad", 38f },
+            { "sigma", 32f },
+            { "H2O", 25f }
+        }, PotionRarity.Rare));
+
+        potions.Add(new Potion("Sigma Juice Deluxe", new Dictionary<string, float> {
+            { "sigma", 35f },
+            { "H2O", 30f },
+            { "boy", 25f }
+        }, PotionRarity.Rare));
+
+        potions.Add(new Potion("Crocodilo Bombardilo Brew", new Dictionary<string, float> {
+            { "giga essence", 35f },
+            { "skibidi", 30f },
+            { "toilet", 28f }
+        }, PotionRarity.Rare));
+
+        potions.Add(new Potion("Ohio Disappearo", new Dictionary<string, float> {
+            { "skibidi", 40f },
+            { "H2O", 35f },
+            { "sigma", 20f }
+        }, PotionRarity.Epic));
+
+        potions.Add(new Potion("Gyatt Gravity Reducer", new Dictionary<string, float> {
+            { "chad", 40f },
+            { "giga essence", 35f },
+            { "H2O", 20f }
+        }, PotionRarity.Epic));
+
+        potions.Add(new Potion("Shrekified Gas", new Dictionary<string, float> {
+            { "rot", 35f },
+            { "toilet", 35f },
+            { "npc dust", 25f }
+        }, PotionRarity.Epic));
+
+        potions.Add(new Potion("GTA 6 Pre-Release Elixir", new Dictionary<string, float> {
+            { "giga essence", 40f },
+            { "rizz powder", 35f },
+            { "npc dust", 20f }
+        }, PotionRarity.Forbidden));
     }
+
+
 
     void Update()
     {
@@ -73,43 +143,46 @@ public class OrderReceiver : MonoBehaviour
     {
         currentOrderData.Clear();
 
-        string[] ingredients = { "H2O", "skibidi", "toilet", "sigma", "boy", "chad" };
-        int ingredientCount = Random.Range(2, 6); // 2 iki 5 ingridientu
+        float roll = Random.Range(0f, 100f);
+        PotionRarity selectedRarity;
 
-        List<string> chosenIngredients = new List<string>();
-        List<float> amounts = new List<float>();
-        //float totalAmount = 0f;
-        float maxTotal = 100f;
+        if (roll < 60f) selectedRarity = PotionRarity.Common;
+        else if (roll < 85f) selectedRarity = PotionRarity.Rare;
+        else if (roll < 95f) selectedRarity = PotionRarity.Epic;
+        else selectedRarity = PotionRarity.Forbidden;
 
-        // Parenkame unikalius ingridientus
-        List<string> availableIngredients = new List<string>(ingredients);
-        for (int i = 0; i < ingredientCount && availableIngredients.Count > 0; i++)
+        List<Potion> filteredPotions = potions.FindAll(p => p.rarity == selectedRarity);
+
+        if (filteredPotions.Count == 0)
         {
-            int index = Random.Range(0, availableIngredients.Count);
-            string selected = availableIngredients[index];
-            availableIngredients.RemoveAt(index);
-            chosenIngredients.Add(selected);
+            Debug.LogWarning($"No potions of rarity {selectedRarity} found! Falling back to common.");
+            filteredPotions = potions.FindAll(p => p.rarity == PotionRarity.Common);
         }
 
-        // Parenkam kiekius
-        float remainingAmount = maxTotal;
+        Potion selectedPotion = filteredPotions[Random.Range(0, filteredPotions.Count)];
 
-        for (int i = 0; i < chosenIngredients.Count; i++)
+        foreach (var entry in selectedPotion.ingredients)
         {
-            int remainingIngredients = chosenIngredients.Count - i;
-            float maxForThis = remainingAmount - (remainingIngredients - 1) * 10f; // min 10ml kiekvienam likusiam
-            float amount = Random.Range(10f, Mathf.Min(40f, maxForThis)); // maxForThis ribojam iki 40ml
-            amount = Mathf.Clamp(amount, 10f, maxForThis);
-            amounts.Add(amount);
-            remainingAmount -= amount;
+            currentOrderData.Add(entry.Key, entry.Value);
         }
 
-        // Surenkam teksta
-        string orderText = "Order:\n";
-        for (int i = 0; i < chosenIngredients.Count; i++)
+        string colorHex = selectedPotion.rarity switch
         {
-            orderText += $"- {chosenIngredients[i]}: {amounts[i]:F0}ml\n";
-            currentOrderData.Add(chosenIngredients[i], amounts[i]);
+            PotionRarity.Common => "#CCCCCC",
+            PotionRarity.Rare => "#4AA6FF",
+            PotionRarity.Epic => "#B86BFF",
+            PotionRarity.Forbidden => "#FF3B3B",
+            _ => "#FFFFFF"
+        };
+
+        string coloredName = $"<b><color={colorHex}>{selectedPotion.name}</color></b>";
+
+        string orderText = $"{coloredName}\n";
+        int i = 1;
+        foreach (var amount in selectedPotion.ingredients.Values)
+        {
+            orderText += $"- X{i}: {amount:F0}ml\n";
+            i++;
         }
 
         currentOrder = orderText;
