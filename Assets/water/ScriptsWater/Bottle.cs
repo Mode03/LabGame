@@ -139,7 +139,7 @@ public class Bottle : MonoBehaviour
         currentVolume -= amount;
         UpdateLiquidAppearance();
 
-        // Jei skyscio nebera — grazinam tuscia sarasa
+        // Jei skyscio nebera ï¿½ grazinam tuscia sarasa
         if (currentVolume <= 0)
         {
             currentVolume = 0;
@@ -159,10 +159,10 @@ public class Bottle : MonoBehaviour
             drainedIngredients.Add(new MixtureIngredient(ing.name, ing.color, drainedAmount));
         }
 
-        // Jei kazkur liko neigiamu ar per mazu likuciu — pataisom
+        // Jei kazkur liko neigiamu ar per mazu likuciu ï¿½ pataisom
         ingredients.RemoveAll(i => i.amount <= 0);
 
-        // Saugiklis nuo juodos spalvos — jei nera ingredientu, padarom skaidru
+        // Saugiklis nuo juodos spalvos ï¿½ jei nera ingredientu, padarom skaidru
         if (ingredients.Count == 0 || totalAmount <= 0)
         {
             ingredients.Clear();

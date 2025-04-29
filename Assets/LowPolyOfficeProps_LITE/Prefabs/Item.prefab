@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 130.32, y: -175.21}
-  m_SizeDelta: {x: 197.6887, y: 201.6214}
+  m_AnchoredPosition: {x: 183.76, y: -257}
+  m_SizeDelta: {x: 289.7531, y: 307.3976}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6319361134035547853
 CanvasRenderer:
@@ -106,8 +106,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 145}
-  m_SizeDelta: {x: 0, y: 50}
+  m_AnchoredPosition: {x: -0.004486084, y: 285.58}
+  m_SizeDelta: {x: 0, y: 53.9176}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5192392684052401966
 CanvasRenderer:
@@ -164,8 +164,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -244,8 +244,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.004477501, y: -148}
-  m_SizeDelta: {x: 197.69, y: 30}
+  m_AnchoredPosition: {x: -0.9839, y: -293.897}
+  m_SizeDelta: {x: 325.0132, y: 35.8765}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5998695012378886086
 CanvasRenderer:
@@ -594,8 +594,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -0.004486084, y: -104.70323}
-  m_SizeDelta: {x: 0, y: 31.6476}
+  m_AnchoredPosition: {x: -0.983902, y: -228.20592}
+  m_SizeDelta: {x: 0, y: 51.2357}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2974537238151548809
 CanvasRenderer:
@@ -652,8 +652,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

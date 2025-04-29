@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class ShopManager : MonoBehaviour
 {
@@ -11,8 +12,11 @@ public class ShopManager : MonoBehaviour
    public ShopTemplate[] ShopPanels;
    public Button[] BuyButton;
    public ShopTrigger shopTrigger; // Reference to ShopTrigger
-
-    public void Exit()
+   public Transform[] itemSpawnPoints;
+    public Camera playerCamera;
+    public GameObject infoPanel;
+    public TextMeshProUGUI infoText;
+     public void Exit()
     {
         if (shopTrigger != null)
         {
@@ -54,14 +58,45 @@ public class ShopManager : MonoBehaviour
     }
    }
    public void purchaseItem(int btnNo)
-   {
-        if(coins >= ShopItems[btnNo].price)
+{
+    if (coins >= ShopItems[btnNo].price)
+    {
+        coins -= ShopItems[btnNo].price;
+        coinUI.text = "Coins: " + coins.ToString();
+        CheckPurchase();
+
+        GameObject prefabToSpawn = ShopItems[btnNo].bottle.gameObject;
+
+        if (prefabToSpawn != null && itemSpawnPoints != null && itemSpawnPoints.Length > 0)
         {
-            coins = coins - ShopItems[btnNo].price;
-             coinUI.text = "Coins: " + coins.ToString();
-             CheckPurchase();
+            Transform randomSpawn = itemSpawnPoints[Random.Range(0, itemSpawnPoints.Length)];
+            GameObject bottleInstance = Instantiate(prefabToSpawn, randomSpawn.position, randomSpawn.rotation);
+
+            // Try to find and configure the BottleInfoDisplay
+            BottleInfoDisplay display = bottleInstance.GetComponentInChildren<BottleInfoDisplay>();
+            if (display != null)
+            {
+                display.playerCamera = playerCamera;
+                display.infoPanel = infoPanel;
+                display.infoText = infoText;
+            }
+
+            // Optionally initialize the bottle contents
+            Bottle bottle = bottleInstance.GetComponent<Bottle>();
+            if (bottle != null)
+            {
+                MixtureIngredient item = ShopItems[btnNo].item;
+                bottle.AddLiquid(item.amount, new List <MixtureIngredient> { item });
+            }
+
+            Debug.Log($"Spawned item: {ShopItems[btnNo].bottle.name}");
         }
-   }
+        else
+        {
+            Debug.LogWarning("Missing prefab or spawn points.");
+        }
+    }
+}
    public void LoadPanels()
    {
         for(int i = 0; i < ShopItems.Length;i++)
