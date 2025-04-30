@@ -17,4 +17,5 @@ MonoBehaviour:
   item:
     name: toxic waste
     color: {r: 0.4403944, g: 1, b: 0, a: 0}
-    amount: 30
+    amount: 50
+  bottle: {fileID: 6002585169863960346, guid: 109b24231ca335245afe6995135d4829, type: 3}
