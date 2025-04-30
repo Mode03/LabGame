@@ -5,11 +5,12 @@ TagManager:
   serializedVersion: 3
   tags:
   - OrderPoint
+  - Event
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - analyzerLayer
   - Water
   - UI
   - shop

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class MouseMovement : MonoBehaviour
 {
     public float mouseSensitivity = 100f;
     private float originalMouseSensitivity; // store the initial 
