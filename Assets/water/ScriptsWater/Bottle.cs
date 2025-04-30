@@ -132,7 +132,7 @@ public class Bottle : MonoBehaviour
 
     public List<MixtureIngredient> DrainLiquid(float amount)
     {
-        Debug.Log("Removing " + amount);
+        //Debug.Log("Removing " + amount);
 
         // Uztikrinam, kad nenuimtu daugiau, nei yra
         amount = Mathf.Clamp(amount, 0, currentVolume);

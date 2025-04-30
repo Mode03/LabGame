@@ -90,7 +90,7 @@ public class Stream : MonoBehaviour
             // Jei pila iš kriaukles
             drainedIngredients = new List<MixtureIngredient>
             {
-                new MixtureIngredient("H2O", Color.blue, pourAmount)
+                new MixtureIngredient("Still water", Color.blue, pourAmount)
             };
         }
 
