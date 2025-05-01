@@ -23,72 +23,84 @@ public class OrderReceiver : MonoBehaviour
     {
         orderTextUI.SetActive(false);
 
-        potions.Add(new Potion("GigaGoofy Mix", new Dictionary<string, float> {
-            { "skibidi", 30f },
-            { "boy", 25f },
-            { "toilet", 30f },
-            { "H2O", 10f }
+        // Common
+        potions.Add(new Potion("Goofy Ahh Serum", new Dictionary<string, float> {
+            { "Still water", 35f },
+            { "Neuron dust", 12f },
+            { "Skibidite", 37f }
+        }, PotionRarity.Common));
+
+        potions.Add(new Potion("Sigma Juice Deluxe", new Dictionary<string, float> {
+            { "Still water", 24f },
+            { "Sigma extract", 13f },
+            { "Neuron dust", 36f }
         }, PotionRarity.Common));
 
         potions.Add(new Potion("Toilet Rage Serum", new Dictionary<string, float> {
-            { "toilet", 40f },
-            { "skibidi", 30f },
-            { "rot", 25f }
+            { "Still water", 22f },
+            { "Toilet core", 36f },
+            { "Bomboclat root", 11f }
         }, PotionRarity.Common));
 
-        potions.Add(new Potion("NPC Whisper Brew", new Dictionary<string, float> {
-            { "rot", 30f },
-            { "toilet", 30f },
-            { "H2O", 30f }
+        potions.Add(new Potion("Tralalero Tralala Water", new Dictionary<string, float> {
+            { "Still water", 17f },
+            { "Gyaatium", 34f },
+            { "Ohio crystal", 39f }
         }, PotionRarity.Common));
 
-        potions.Add(new Potion("Skibidi Brain Melter", new Dictionary<string, float> {
-            { "skibidi", 33f },
-            { "boy", 28f },
-            { "chad", 35f }
-        }, PotionRarity.Rare));
-
-        potions.Add(new Potion("Chad Flex Elixir", new Dictionary<string, float> {
-            { "chad", 38f },
-            { "sigma", 32f },
-            { "H2O", 25f }
-        }, PotionRarity.Rare));
-
-        potions.Add(new Potion("Sigma Juice Deluxe", new Dictionary<string, float> {
-            { "sigma", 35f },
-            { "H2O", 30f },
-            { "boy", 25f }
-        }, PotionRarity.Rare));
-
+        // Rare
         potions.Add(new Potion("Crocodilo Bombardilo Brew", new Dictionary<string, float> {
-            { "giga essence", 35f },
-            { "skibidi", 30f },
-            { "toilet", 28f }
+            { "Still water", 13f },
+            { "Crocodiline oil", 36f },
+            { "Bomboclat root", 21f }
         }, PotionRarity.Rare));
+
+        potions.Add(new Potion("Low Taper Fade Elixir", new Dictionary<string, float> {
+            { "Still water", 30f },
+            { "Mew juice", 35f },
+            { "Sigma extract", 30f }
+        }, PotionRarity.Rare));
+
+        potions.Add(new Potion("Cooked Neuron Smoothie", new Dictionary<string, float> {
+            { "Still water", 35f },
+            { "Neuron dust", 30f },
+            { "Ohio crystal", 25f }
+        }, PotionRarity.Rare));
+
+        // Epic
+        potions.Add(new Potion("GYATT-O-RATE Ultra Edition", new Dictionary<string, float> {
+            { "Gyaatium", 35f },
+            { "Mew juice", 30f },
+            { "Sigma extract", 30f }
+        }, PotionRarity.Epic));
 
         potions.Add(new Potion("Ohio Disappearo", new Dictionary<string, float> {
-            { "skibidi", 40f },
-            { "H2O", 35f },
-            { "sigma", 20f }
+            { "Ohio crystal", 30f },
+            { "Toilet core", 35f },
+            { "Pre-gta6 essence", 30f }
         }, PotionRarity.Epic));
 
         potions.Add(new Potion("Gyatt Gravity Reducer", new Dictionary<string, float> {
-            { "chad", 40f },
-            { "giga essence", 35f },
-            { "H2O", 20f }
+            { "Gyaatium", 35f },
+            { "Ohio crystal", 30f },
+            { "Sigma extract", 30f }
         }, PotionRarity.Epic));
 
-        potions.Add(new Potion("Shrekified Gas", new Dictionary<string, float> {
-            { "rot", 35f },
-            { "toilet", 35f },
-            { "npc dust", 25f }
-        }, PotionRarity.Epic));
+        // Forbidden
+        potions.Add(new Potion("Shrek's Swamp Juice", new Dictionary<string, float> {
+            { "Crocodiline oil", 25f },
+            { "Toilet core", 25f },
+            { "Bomboclat root", 25f },
+            { "Skibidite", 25f }
+        }, PotionRarity.Forbidden));
 
         potions.Add(new Potion("GTA 6 Pre-Release Elixir", new Dictionary<string, float> {
-            { "giga essence", 40f },
-            { "rizz powder", 35f },
-            { "npc dust", 20f }
+            { "Pre-gta6 essence", 25f },
+            { "Ohio crystal", 25f },
+            { "Sigma extract", 25f },
+            { "Neuron dust", 25f }
         }, PotionRarity.Forbidden));
+
     }
 
 
