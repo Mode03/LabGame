@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e14f3020d92b3645bfdbada3ef5ac9b, type: 3}
-  m_Name: pepper
+  m_Name: Bomboclat_Root
   m_EditorClassIdentifier: 
-  image: {fileID: 2800000, guid: c2fa1577f687a884a9dfc8786159e549, type: 3}
-  price: 10
+  image: {fileID: 2800000, guid: 8bf616a80d2d3544595deb23c3e0bf22, type: 3}
+  price: 11
   item:
-    name: pepper
-    color: {r: 0, g: 0.20000002, b: 0.40000004, a: 0}
+    name: Bomboclat Root
+    color: {r: 1, g: 0, b: 0, a: 0}
     amount: 50
-  bottle: {fileID: 6497579500610592929, guid: b1f8a1234b97dd745b9ea25b3d4d3ceb, type: 3}
+  bottle: {fileID: 6002585169863960346, guid: 109b24231ca335245afe6995135d4829, type: 3}

@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVolume: 100
-  currentVolume: 30
+  currentVolume: 0
   ingredients: []
 --- !u!114 &12868254252701038
 MonoBehaviour:

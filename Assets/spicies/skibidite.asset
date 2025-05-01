@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e14f3020d92b3645bfdbada3ef5ac9b, type: 3}
+  m_Name: skibidite
+  m_EditorClassIdentifier: 
+  image: {fileID: 2800000, guid: a7a037c9a03d2fa419576f7a3c5d5df0, type: 3}
+  price: 10
+  item:
+    name: Skibidite
+    color: {r: 0.49803922, g: 0.3372549, b: 0.6862745, a: 0}
+    amount: 50
+  bottle: {fileID: 6497579500610592929, guid: b1f8a1234b97dd745b9ea25b3d4d3ceb, type: 3}
