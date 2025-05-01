@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using TMPro;
 public class AnalyzerInteraction : MonoBehaviour
 {
     public GameObject analyzerUI;
@@ -8,26 +8,52 @@ public class AnalyzerInteraction : MonoBehaviour
     public float interactionDistance = 3f;
     public LayerMask analyzerLayer;
 
+    public TMP_Text interactionText;
+
     private bool isAnalyzerOpen = false;
 
     void Start()
     {
         analyzerUI.SetActive(false); // Neparodyk is pradziu
+        if (interactionText != null)
+        {
+            interactionText.gameObject.SetActive(false);
+        }
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (isAnalyzerOpen)
         {
-            if (isAnalyzerOpen)
+            // jei jau atidaryta, paspaudus E – uzdarom
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                ExitAnalyzer(); // jei atidarytas, tada uzdaryk
+                ExitAnalyzer();
             }
-            else if (IsLookingAtAnalyzer())
+
+            if (interactionText != null)
+                interactionText.gameObject.SetActive(false);
+
+            return;
+        }
+
+        if (IsLookingAtAnalyzer())
+        {
+            if (interactionText != null)
             {
-                ToggleAnalyzer(true); // jei ziuri i analyzer ir paspaudi E, tada atidaryk
-                Debug.Log("Analyzer detected and E pressed");
+                interactionText.text = "Press [E]";
+                interactionText.gameObject.SetActive(true);
             }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                ToggleAnalyzer(true);
+            }
+        }
+        else
+        {
+            if (interactionText != null)
+                interactionText.gameObject.SetActive(false);
         }
     }
 
