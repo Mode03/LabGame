@@ -8,7 +8,7 @@ public class start : MonoBehaviour
     {
         if (Input.anyKey && !keyPressed)
         { 
-            SceneManager.LoadSceneAsync(1);
+            SceneManager.LoadSceneAsync(2);
         }
         else
         {
