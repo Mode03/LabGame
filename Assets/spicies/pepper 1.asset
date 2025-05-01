@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e14f3020d92b3645bfdbada3ef5ac9b, type: 3}
-  m_Name: pepper
+  m_Name: pepper 1
   m_EditorClassIdentifier: 
   image: {fileID: 2800000, guid: c2fa1577f687a884a9dfc8786159e549, type: 3}
   price: 10

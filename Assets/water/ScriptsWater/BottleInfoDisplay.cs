@@ -3,7 +3,7 @@ using TMPro;
 
 public class BottleInfoDisplay : MonoBehaviour
 {
-    public Camera playerCamera; // Žaidejo kamera
+    public Camera playerCamera; // ï¿½aidejo kamera
     public float maxDistance = 5f; // Maksimalus atstumas iki megintuvelio
     public GameObject infoPanel; // UI panel
     public TextMeshProUGUI infoText; // UI tekstas
@@ -20,13 +20,13 @@ public class BottleInfoDisplay : MonoBehaviour
 
             if (bottle != null)
             {
-                // Jei pataikom i buteli — rodom info
+                // Jei pataikom i buteli ï¿½ rodom info
                 ShowBottleInfo(bottle);
                 return;
             }
         }
 
-        // Jei nieko nerandam — paslepiam lentele
+        // Jei nieko nerandam ï¿½ paslepiam lentele
         infoPanel.SetActive(false);
     }
 

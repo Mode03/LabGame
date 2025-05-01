@@ -51,28 +51,33 @@ public class Bottle : MonoBehaviour
 
     private void UpdateLiquidAppearance()
     {
-        float fillAmount;
+            if (liquidMaterial == null)
+            {
+                Debug.LogWarning("Liquid material is not assigned.");
+                return;
+            }
 
-        if (currentVolume <= 0)
-        {
-            fillAmount = -0.5f; // Tuscias buteliukas
-        }
-        else if (currentVolume > 0 && liquidMaterial.GetFloat("_Fill") == -0.5f)
-        {
-            fillAmount = -0.03f; // Jei tik pradedam pildyti, nustatom i pradine reiksme
-        }
-        else
-        {
-            fillAmount = Mathf.Lerp(-0.03f, 0.25f, currentVolume / maxVolume);
-        }
+            float fillAmount;
 
-        liquidMaterial.SetFloat("_Fill", fillAmount);
+            if (currentVolume <= 0)
+            {
+                fillAmount = -0.5f; // Empty
+            }
+            else if (currentVolume > 0 && liquidMaterial.GetFloat("_Fill") == -0.5f)
+            {
+                fillAmount = -0.03f; // Start filling
+            }
+            else
+            {
+                fillAmount = Mathf.Lerp(-0.03f, 0.25f, currentVolume / maxVolume);
+            }
 
-        // Apskaiciuoja misinio spalva pagal visus ingredientus
-        Color finalColor = CalculateMixtureColor();
-        liquidMaterial.SetColor("_LiquidColor", finalColor);
-        liquidMaterial.SetColor("_Surface_color", finalColor * 1.2f);
-        liquidMaterial.SetColor("_FresnelColor", finalColor * 0.8f);
+            liquidMaterial.SetFloat("_Fill", fillAmount);
+
+            Color finalColor = CalculateMixtureColor();
+            liquidMaterial.SetColor("_LiquidColor", finalColor);
+            liquidMaterial.SetColor("_Surface_color", finalColor * 1.2f);
+            liquidMaterial.SetColor("_FresnelColor", finalColor * 0.8f);
     }
 
     private Color CalculateMixtureColor()
@@ -139,7 +144,7 @@ public class Bottle : MonoBehaviour
         currentVolume -= amount;
         UpdateLiquidAppearance();
 
-        // Jei skyscio nebera — grazinam tuscia sarasa
+        // Jei skyscio nebera ï¿½ grazinam tuscia sarasa
         if (currentVolume <= 0)
         {
             currentVolume = 0;
@@ -159,10 +164,10 @@ public class Bottle : MonoBehaviour
             drainedIngredients.Add(new MixtureIngredient(ing.name, ing.color, drainedAmount));
         }
 
-        // Jei kazkur liko neigiamu ar per mazu likuciu — pataisom
+        // Jei kazkur liko neigiamu ar per mazu likuciu ï¿½ pataisom
         ingredients.RemoveAll(i => i.amount <= 0);
 
-        // Saugiklis nuo juodos spalvos — jei nera ingredientu, padarom skaidru
+        // Saugiklis nuo juodos spalvos ï¿½ jei nera ingredientu, padarom skaidru
         if (ingredients.Count == 0 || totalAmount <= 0)
         {
             ingredients.Clear();
