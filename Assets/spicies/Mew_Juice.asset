@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e14f3020d92b3645bfdbada3ef5ac9b, type: 3}
+  m_Name: Mew_Juice
+  m_EditorClassIdentifier: 
+  image: {fileID: 2800000, guid: ef88ea145f19bdc41adc4118a41e23b0, type: 3}
+  price: 14
+  item:
+    name: Mew Juice
+    color: {r: 0.98039216, g: 0.8392157, b: 0.64705884, a: 0}
+    amount: 50
+  bottle: {fileID: 2829197314099678349, guid: ca3c5216f03fcfa46bb748c5c7094a83, type: 3}

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e14f3020d92b3645bfdbada3ef5ac9b, type: 3}
+  m_Name: Crocodiline_Oil
+  m_EditorClassIdentifier: 
+  image: {fileID: 2800000, guid: 35e24e2a69456f7449d77066f6d0866d, type: 3}
+  price: 12
+  item:
+    name: Crocodiline Oil
+    color: {r: 0.13333334, g: 0.54509807, b: 0.13333334, a: 0}
+    amount: 50
+  bottle: {fileID: 2829197314099678349, guid: ca3c5216f03fcfa46bb748c5c7094a83, type: 3}

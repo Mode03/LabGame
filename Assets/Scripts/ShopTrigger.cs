@@ -27,9 +27,9 @@ public class ShopTrigger : MonoBehaviour
     if (IsLookingAtShop())
     {
         interactText.gameObject.SetActive(true);
-        interactText.text = "Press [F] to pay respect";
+        interactText.text = "Press [E]? to pay respect";
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             isShopOpen = true;
             ToggleShop(true);
