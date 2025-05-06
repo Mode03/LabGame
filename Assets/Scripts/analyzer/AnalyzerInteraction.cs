@@ -8,6 +8,8 @@ public class AnalyzerInteraction : MonoBehaviour
     public float interactionDistance = 3f;
     public LayerMask analyzerLayer;
 
+    public AnalyzerManagerScript analyzerManager;
+
     public TMP_Text interactionText;
 
     private bool isAnalyzerOpen = false;
@@ -41,7 +43,28 @@ public class AnalyzerInteraction : MonoBehaviour
         {
             if (interactionText != null)
             {
-                interactionText.text = "Press [E]";
+                string message = "Press [E]";
+
+                // Patikrinam ar analize vyksta
+                float maxRemaining = 0f;
+
+                for (int i = 0; i < analyzerManager.revealTimers.Length; i++)
+                {
+                    if (analyzerManager.isBought[i] && Time.time < analyzerManager.revealTimers[i])
+                    {
+                        float remaining = analyzerManager.revealTimers[i] - Time.time;
+                        if (remaining > maxRemaining) maxRemaining = remaining;
+                    }
+                }
+
+                if (maxRemaining > 0)
+                {
+                    int minutes = Mathf.FloorToInt(maxRemaining / 60);
+                    int seconds = Mathf.FloorToInt(maxRemaining % 60);
+                    message += $"\n({minutes:D2}:{seconds:D2} remaining)";
+                }
+
+                interactionText.text = message;
                 interactionText.gameObject.SetActive(true);
             }
 

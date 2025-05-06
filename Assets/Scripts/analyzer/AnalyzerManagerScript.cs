@@ -12,6 +12,12 @@ public class AnalyzerManagerScript : MonoBehaviour
     public float coins;
     public TMP_Text CoinsTxt;
 
+    public float[] revealTimers = new float[12];
+    public float[] ingredientAnalyzeDurations = new float[12]
+    {
+        15f, 30f, 45f, 60f, 90f, 120f, 140f, 160f, 180f, 240f, 300f, 0f
+    };
+
     public Dictionary<int, string> ingredientDescriptions = new Dictionary<int, string>
     {
         {0, "Still water – No side effects. Just pure hydration. (Boring but safe.)"},
@@ -59,10 +65,22 @@ public class AnalyzerManagerScript : MonoBehaviour
 
         if (!isBought[id]) // Tik jei dar nepirktas
         {
+            // Patikrinam ar kitas analizes procesas vyksta
+            for (int i = 0; i < revealTimers.Length; i++)
+            {
+                if (isBought[i] && Time.time < revealTimers[i])
+                {
+                    Debug.Log("Another analysis is already underway.");
+                    return; // Iseinam is funkcijos – leidziam tik viena analize vienu metu
+                }
+            }
+
+            // Jei turim pakankamai monetu
             if (coins >= analyzerItems[2, id])
             {
                 coins -= analyzerItems[2, id];
                 isBought[id] = true;
+                revealTimers[id] = Time.time + ingredientAnalyzeDurations[id];
 
                 CoinsTxt.text = "Coins:" + coins;
 
@@ -71,4 +89,5 @@ public class AnalyzerManagerScript : MonoBehaviour
             }
         }
     }
+
 }
