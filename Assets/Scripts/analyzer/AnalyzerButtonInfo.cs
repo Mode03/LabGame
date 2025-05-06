@@ -19,14 +19,28 @@ public class AnalyzerButtonInfo : MonoBehaviour
         {
             PriceTxt.text = "";
 
-            // parodyti tikra aprasyma
-            if (manager.ingredientDescriptions.ContainsKey(ItemID))
+            if (Time.time >= manager.revealTimers[ItemID])
             {
-                DescriptionTxt.text = manager.ingredientDescriptions[ItemID];
+                // parodyti tikra aprasyma
+                if (manager.ingredientDescriptions.ContainsKey(ItemID))
+                {
+                    DescriptionTxt.text = manager.ingredientDescriptions[ItemID];
+                }
+                else
+                {
+                    DescriptionTxt.text = "No description available.";
+                }
             }
             else
             {
-                DescriptionTxt.text = "No description available.";
+                // Laikmatis iki analizes pabaigos
+                float remainingTime = manager.revealTimers[ItemID] - Time.time;
+                remainingTime = Mathf.Max(0, remainingTime);
+
+                int minutes = Mathf.FloorToInt(remainingTime / 60);
+                int seconds = Mathf.FloorToInt(remainingTime % 60);
+
+                DescriptionTxt.text = string.Format("Analyzing...\n{0:D2}:{1:D2}", minutes, seconds);
             }
         }
         else
