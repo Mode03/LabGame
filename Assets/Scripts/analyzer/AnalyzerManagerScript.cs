@@ -6,32 +6,30 @@ using UnityEngine.UI;
 
 public class AnalyzerManagerScript : MonoBehaviour
 {
-
     public int[,] analyzerItems = new int[5,12];
     public bool[] isBought = new bool[12];
-    public float coins;
     public TMP_Text CoinsTxt;
+    public PlayerDataManager player; 
 
     public Dictionary<int, string> ingredientDescriptions = new Dictionary<int, string>
     {
-        {0, "Still water – No side effects. Just pure hydration. (Boring but safe.)"},
-        {1, "Skibidite – Causes uncontrollable body movement and goofy dancing (Skibidi animation)."},
-        {2, "Sigma Extract – Transforms the user into an 'alpha' mindset. Gains ultimate confidence."},
-        {3, "Gyaatium – Stretches hips and legs for enhanced GYATT proportions. Pure thicc energy."},
-        {4, "Toilet Core – Morphs the user's body into a toilet-shaped anomaly. Skibidi style achieved."},
-        {5, "Neuron Dust – Decreases intelligence. Speech and behavior become progressively more goofy."},
-        {6, "Ohio Crystal – Triggers glitch effects and unpredictable movement. Certified Ohio behavior."},
-        {7, "Mew Juice – Enhances jawline angle. Mewing effect activated. Become the Chad."},
-        {8, "Bomboclat Root – Induces rage outbursts and random yelling. Caribbean fury unlocked."},
-        {9, "Crocodiline Oil – Gives user scaly skin and a deep crocodile voice. Reptilian mode ON."},
-        {10, "Pre-GTA6 Essence – Temporarily hypes user about unreleased content. Enters delusional hype state."}
+        {0, "Still water ï¿½ No side effects. Just pure hydration. (Boring but safe.)"},
+        {1, "Skibidite ï¿½ Causes uncontrollable body movement and goofy dancing (Skibidi animation)."},
+        {2, "Sigma Extract ï¿½ Transforms the user into an 'alpha' mindset. Gains ultimate confidence."},
+        {3, "Gyaatium ï¿½ Stretches hips and legs for enhanced GYATT proportions. Pure thicc energy."},
+        {4, "Toilet Core ï¿½ Morphs the user's body into a toilet-shaped anomaly. Skibidi style achieved."},
+        {5, "Neuron Dust ï¿½ Decreases intelligence. Speech and behavior become progressively more goofy."},
+        {6, "Ohio Crystal ï¿½ Triggers glitch effects and unpredictable movement. Certified Ohio behavior."},
+        {7, "Mew Juice ï¿½ Enhances jawline angle. Mewing effect activated. Become the Chad."},
+        {8, "Bomboclat Root ï¿½ Induces rage outbursts and random yelling. Caribbean fury unlocked."},
+        {9, "Crocodiline Oil ï¿½ Gives user scaly skin and a deep crocodile voice. Reptilian mode ON."},
+        {10, "Pre-GTA6 Essence ï¿½ Temporarily hypes user about unreleased content. Enters delusional hype state."}
     };
-
+    
 
     void Start()
     {
-        CoinsTxt.text = "Coins:" + coins;
-
+       
         // ID's
         for (int i = 1; i <= 11; i++)
         {
@@ -51,6 +49,21 @@ public class AnalyzerManagerScript : MonoBehaviour
         analyzerItems[2, 9] = 90;
         analyzerItems[2, 10] = 100;
     }
+    void Update()
+    {
+         if (player != null)
+        {
+            CoinsTxt.text = "Coins: " + player.GetCurrency().ToString();
+        }
+        else
+        {
+            if (player == null)
+            Debug.LogError("PlayerDataManager (player) is null.");
+
+            if (CoinsTxt == null)
+            Debug.LogError("CoinsTxt is null.");
+        }
+    }
 
     public void Buy()
     {
@@ -59,12 +72,12 @@ public class AnalyzerManagerScript : MonoBehaviour
 
         if (!isBought[id]) // Tik jei dar nepirktas
         {
-            if (coins >= analyzerItems[2, id])
+            if (player.GetCurrency() >= analyzerItems[2, id])
             {
-                coins -= analyzerItems[2, id];
+                player.SubtractCurrency(analyzerItems[2, id]);
                 isBought[id] = true;
 
-                CoinsTxt.text = "Coins:" + coins;
+                CoinsTxt.text = "Coins:" + player.GetCurrency().ToString();
 
                 // Pasikeicia mygtuko tekstas i "Purchased" (pvz.)
                 ButtonRef.GetComponentInChildren<TMP_Text>().text = "Purchased";
