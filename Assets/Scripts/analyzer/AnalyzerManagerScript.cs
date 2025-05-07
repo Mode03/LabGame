@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class AnalyzerManagerScript : MonoBehaviour
 {
-
     public int[,] analyzerItems = new int[5,12];
     public bool[] isBought = new bool[12];
     public float coins;
@@ -32,6 +31,13 @@ public class AnalyzerManagerScript : MonoBehaviour
         {9, "Crocodiline Oil – Gives user scaly skin and a deep crocodile voice. Reptilian mode ON."},
         {10, "Pre-GTA6 Essence – Temporarily hypes user about unreleased content. Enters delusional hype state."}
     };
+
+    public static AnalyzerManagerScript Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
 
     void Start()
