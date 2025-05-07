@@ -191,9 +191,26 @@ public class OrderReceiver : MonoBehaviour
 
         string orderText = $"{coloredName}\n";
         int i = 1;
-        foreach (var amount in selectedPotion.ingredients.Values)
+        foreach (var entry in selectedPotion.ingredients)
         {
-            orderText += $"- X{i}: {amount:F0}ml\n";
+            string ingredientName = entry.Key;
+            float amount = entry.Value;
+
+            string displayName;
+
+            // Gauk ID pagal pavadinimą (čia reiks ingredientų ID sąsajos – padarysim toliau)
+            int id = IngredientIDResolver.GetIngredientID(ingredientName);
+
+            if (AnalyzerManagerScript.Instance != null && AnalyzerManagerScript.Instance.isBought[id])
+            {
+                displayName = ingredientName;
+            }
+            else
+            {
+                displayName = $"X{i}";
+            }
+
+            orderText += $"- {displayName}: {amount:F0}ml\n";
             i++;
         }
 
