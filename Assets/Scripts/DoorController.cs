@@ -30,5 +30,10 @@ public class DoorController : MonoBehaviour
     public void ToggleDoor()
     {
         isOpen = !isOpen;
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.doorClip);
+        }
     }
 }
