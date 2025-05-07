@@ -19,6 +19,8 @@ public class OrderReceiver : MonoBehaviour
 
     public OrderNPC npcMovement;
 
+    private Potion currentPotion;
+
     void Start()
     {
         orderTextUI.SetActive(false);
@@ -216,6 +218,8 @@ public class OrderReceiver : MonoBehaviour
 
         currentOrder = orderText;
         orderDisplayUI.text = currentOrder;
+
+        currentPotion = selectedPotion;
     }
 
     public void CheckHeldBottle()
@@ -235,7 +239,7 @@ public class OrderReceiver : MonoBehaviour
 
         if (IsBottleCorrect(bottle))
         {
-            Debug.Log("Atitinka uzsakyma!");
+            Debug.Log($"Atitinka uzsakyma! Tirpalo pavadinimas: {currentPotion.name}");
             CompleteOrder();
         }
         else
