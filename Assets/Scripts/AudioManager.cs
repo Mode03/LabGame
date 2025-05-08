@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip pouringClip;
     public AudioClip doorClip;
     public AudioClip backgroundMusic;
+    public AudioClip analyzerStartClip;
 
     void Awake()
     {
