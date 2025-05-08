@@ -7,6 +7,8 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
+    [SerializeField] private Slider mouseSensitivitySlider;
+    [SerializeField] private Slider scrollSensitivitySlider;
 
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject playerUI;
@@ -31,6 +33,16 @@ public class SettingsManager : MonoBehaviour
         {
             SetMusicVolume();
             SetSFXVolume();
+        }
+
+        if (PlayerPrefs.HasKey("mouseSensitivity"))
+        {
+            LoadSensitivity();
+        }
+        else
+        {
+            SetMouseSensitivity();
+            SetScrollSensitivity();
         }
     }
 
@@ -104,6 +116,20 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetFloat("sfxVolume", volume);
     }
 
+    public void SetMouseSensitivity()
+    {
+        float sensitivity = mouseSensitivitySlider.value;
+        cameraScript.mouseSensitivity = sensitivity;
+        PlayerPrefs.SetFloat("mouseSensitivity", sensitivity);
+    }
+
+    public void SetScrollSensitivity()
+    {
+        float sensitivity = scrollSensitivitySlider.value;
+        ObjectGrabbable.rotationSensitivity = sensitivity; // nustato visiems
+        PlayerPrefs.SetFloat("scrollSensitivity", sensitivity);
+    }
+
     private void LoadVolume()
     {
         musicSlider.value = PlayerPrefs.GetFloat("musicVolume");
@@ -111,5 +137,17 @@ public class SettingsManager : MonoBehaviour
 
         SetMusicVolume();
         SetSFXVolume();
+    }
+
+    private void LoadSensitivity()
+    {
+        float mouseSens = PlayerPrefs.GetFloat("mouseSensitivity");
+        float scrollSens = PlayerPrefs.GetFloat("scrollSensitivity");
+
+        mouseSensitivitySlider.value = mouseSens;
+        scrollSensitivitySlider.value = scrollSens;
+
+        SetMouseSensitivity();
+        SetScrollSensitivity();
     }
 }
