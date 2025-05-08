@@ -10,6 +10,16 @@ public class PourDetector : MonoBehaviour
     private bool isPouring = false;
     private Stream currentStream = null;
 
+    public Bottle bottle;
+
+    private void Start()
+    {
+        if (bottle == null)
+        {
+            bottle = GetComponentInParent<Bottle>();
+        }
+    }
+
     private void Update()
     {
         bool pourCheck = CalculatePourAngle() < pourThreshold;
@@ -31,6 +41,12 @@ public class PourDetector : MonoBehaviour
 
     private void StartPour()
     {
+        if (bottle == null || bottle.currentVolume <= 0f)
+        {
+            Debug.Log("No liquid to pour.");
+            return;
+        }
+
         Debug.Log("Start");
         currentStream = CreateStream();
         currentStream.Begin();
@@ -48,7 +64,7 @@ public class PourDetector : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("EndPour was called, but currentStream is null!");
+            //Debug.LogWarning("EndPour was called, but currentStream is null!");
         }
     }
 
