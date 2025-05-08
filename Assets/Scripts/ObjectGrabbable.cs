@@ -7,7 +7,7 @@ public class ObjectGrabbable : MonoBehaviour
     private Rigidbody objectRigidbody;
     private Transform objectGrabPointTransform;
 
-    public float rotationSensitivity = 2f; // rotation speed
+    public static float rotationSensitivity = 2f; // rotation speed
 
     private float horizontalRotationAngle = 0f; // Rotation for Mouse X
     private float scrollRotationAngle = 0f; // Rotation for ScrollWheel
