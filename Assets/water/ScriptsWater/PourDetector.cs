@@ -50,8 +50,6 @@ public class PourDetector : MonoBehaviour
         Debug.Log("Start");
         currentStream = CreateStream();
         currentStream.Begin();
-
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.pouringClip);
     }
 
     private void EndPour()

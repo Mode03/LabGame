@@ -85,7 +85,6 @@ public class AnalyzerInteraction : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, interactionDistance, analyzerLayer))
         {
-            Debug.Log("Raycast hit: " + hit.collider.name);
             return true;
         }
         return false;
