@@ -41,5 +41,24 @@ public class AudioManager : MonoBehaviour
         musicSource.loop = true;
         musicSource.Play();
     }
+
+    public void StartPouring()
+    {
+        if (sfxSource.isPlaying && sfxSource.clip == pouringClip) return;
+
+        sfxSource.clip = pouringClip;
+        sfxSource.loop = true;
+        sfxSource.Play();
+    }
+
+    public void StopPouring()
+    {
+        if (sfxSource.clip == pouringClip)
+        {
+            sfxSource.Stop();
+            sfxSource.clip = null;
+            sfxSource.loop = false;
+        }
+    }
 }
 

@@ -24,6 +24,7 @@ public class Stream : MonoBehaviour
 
     public void Begin()
     {
+        AudioManager.Instance.StartPouring();
         StartCoroutine(UpdateParticle());
         pourRoutine = StartCoroutine(BeginPour());
     }
@@ -53,6 +54,7 @@ public class Stream : MonoBehaviour
 
     public void End()
     {
+        AudioManager.Instance.StopPouring();
         StopCoroutine(pourRoutine);
         pourRoutine = StartCoroutine(EndPour());
     }
