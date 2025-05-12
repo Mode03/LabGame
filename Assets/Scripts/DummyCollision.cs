@@ -4,6 +4,10 @@ using UnityEngine.Animations.Rigging;
 
 public class DummyCollision : MonoBehaviour
 {
+    public GameObject explosionFire;
+
+    public SphereCollider sphereCollider; // Assign this in the Inspector or via GetComponent
+
     public GameObject target;
     public Rig headRig;
     public Animator dummyAnimator; // Assign this via Inspector
@@ -121,24 +125,58 @@ public class DummyCollision : MonoBehaviour
 
     IEnumerator TriggerFallAfterDelay(float delay)
     {
+        StartCoroutine(ExpandColliderAfterDelay(0f));
         yield return new WaitForSeconds(delay);
 
         if (dummyAnimator != null)
         {
+
             Debug.Log("Triggering fall animation");
 
-            dummyAnimator.applyRootMotion = true; // <— Option A: turn on for fall
+            dummyAnimator.applyRootMotion = true;
 
+            int randomDeath = 1; //Random.Range(0, 3); // returns 1 or 2
+            dummyAnimator.SetInteger("DeathType", randomDeath);
             dummyAnimator.SetTrigger("FallTrigger");
 
-            // OPTIONAL: Wait and then lower dummy manually (Option B alternative)
-            // yield return new WaitForSeconds(0.5f);
-            // transform.position += Vector3.down * 0.5f;
+            if (randomDeath == 1)
+            {
+                StartCoroutine(ResetToStandAfterDelay(10f));
+                explosionFire.GetComponent<ParticleSystem>().Play();
+                yield return new WaitForSeconds(1.5f);
+                Transform headTransform = transform.Find("metarig_male/hips/spine/chest/upper_chest/neck/head");
+                if (headTransform != null)
+                {
+                    Vector3 originalScale = headTransform.localScale;
+                    headTransform.localScale = Vector3.zero; // hide head
+                    yield return new WaitForSeconds(8.5f); // wait 3 seconds
+                    headTransform.localScale = originalScale; // show head again
+
+                }
+
+            }
+            else if (randomDeath == 2)
+            {
+                // Trigger death1 after 2 seconds, regardless of whether death2 finished
+                StartCoroutine(SwitchToDeath1AfterDelay(2f));
+                StartCoroutine(ResetToStandAfterDelay(10f));
+            }
         }
 
-        // Then schedule reset
-        StartCoroutine(ResetToStandAfterDelay(10f));
     }
+    IEnumerator SwitchToDeath1AfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+
+        Debug.Log("Forcing switch to death1 after delay");
+
+        dummyAnimator.SetInteger("DeathType", 1);
+        dummyAnimator.SetTrigger("FallTrigger");
+
+    }
+
+
 
 
     IEnumerator ResetToStandAfterDelay(float delay)
@@ -162,6 +200,29 @@ public class DummyCollision : MonoBehaviour
         transform.position = new Vector3(54.515f, 0.234f, 22.621f);
         transform.rotation = new Quaternion(0f, -0.9996081f, 0f, 0.02799418f);
         transform.localScale = new Vector3(1.7867f, 1.7867f, 1.7867f);
+    }
+
+    IEnumerator ExpandColliderAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (sphereCollider != null)
+        {
+            Debug.Log("Expanding SphereCollider radius to 10");
+            sphereCollider.radius = 10f;
+            StartCoroutine(ShrinkColliderAfterDelay(17f, 1.5f)); // e.g., shrink back to 1 after 5 seconds
+
+        }
+    }
+    IEnumerator ShrinkColliderAfterDelay(float delay, float originalRadius)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (sphereCollider != null)
+        {
+            Debug.Log("Resetting SphereCollider radius to original");
+            sphereCollider.radius = originalRadius;
+        }
     }
 
 
