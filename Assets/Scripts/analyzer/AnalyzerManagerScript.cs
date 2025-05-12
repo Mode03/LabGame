@@ -92,6 +92,8 @@ public class AnalyzerManagerScript : MonoBehaviour
 
                 // Pasikeicia mygtuko tekstas i "Purchased" (pvz.)
                 ButtonRef.GetComponentInChildren<TMP_Text>().text = "Purchased";
+
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.analyzerStartClip);
             }
         }
     }

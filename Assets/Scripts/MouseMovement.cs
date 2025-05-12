@@ -5,7 +5,6 @@ using UnityEngine;
 public class MouseMovement : MonoBehaviour
 {
     public float mouseSensitivity = 100f;
-    private float originalMouseSensitivity; // store the initial 
 
     float xRotation = 0f;
     float YRotation = 0f;
@@ -14,23 +13,14 @@ public class MouseMovement : MonoBehaviour
     {
         //locking the cursor to the middle of the screen and making it invisible
         Cursor.lockState = CursorLockMode.Locked;
-        originalMouseSensitivity = mouseSensitivity; // save the initial sensitivity
     }
 
     void Update()
     {
         // if "R" is held, sensitivity is 0 to prevent camera movement
-        if (Input.GetKey(KeyCode.R))
-        {
-            mouseSensitivity = 0f;
-        }
-        else
-        {
-            mouseSensitivity = originalMouseSensitivity;
-        }
-
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        float effectiveSensitivity = Input.GetKey(KeyCode.R) ? 0f : mouseSensitivity;
+        float mouseX = Input.GetAxis("Mouse X") * effectiveSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * effectiveSensitivity * Time.deltaTime;
 
         //control rotation around x axis (Look up and down)
         xRotation -= mouseY;
