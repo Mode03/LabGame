@@ -52,12 +52,6 @@ public class ShopManager : MonoBehaviour
             Debug.LogError("CoinsTxt is null.");
         }
     }
-   public void AddCoins()
-   {
-    player.AddCurrency(50);
-    CoinsTxt.text = "Coins: " + player.GetCurrency().ToString();
-    CheckPurchase();
-   }
    public void CheckPurchase()
    {
     for(int i = 0; i < ShopItems.Length;i++)
