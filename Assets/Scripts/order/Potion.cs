@@ -16,13 +16,15 @@ public class Potion
     public Dictionary<string, float> ingredients;
     public PotionRarity rarity;
     public int unlockLevel;
+    public int price;
 
-    public Potion(string name, Dictionary<string, float> ingredients, PotionRarity rarity, int unlockLevel)
+    public Potion(string name, Dictionary<string, float> ingredients, PotionRarity rarity, int unlockLevel, int price)
     {
         this.name = name;
         this.ingredients = ingredients;
         this.rarity = rarity;
         this.unlockLevel = unlockLevel;
+        this.price = price;
     }
 }
 
