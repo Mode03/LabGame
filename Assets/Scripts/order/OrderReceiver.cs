@@ -36,57 +36,57 @@ public class OrderReceiver : MonoBehaviour
             { "Still water", 24f },
             { "Sigma extract", 13f },
             { "Neuron dust", 36f }
-        }, PotionRarity.Common, 3));
+        }, PotionRarity.Common, 2));
 
         potions.Add(new Potion("Toilet Rage Serum", new Dictionary<string, float> {
             { "Still water", 22f },
             { "Toilet core", 36f },
             { "Bomboclat root", 11f }
-        }, PotionRarity.Common, 5));
+        }, PotionRarity.Common, 6));
 
         potions.Add(new Potion("Tralalero Tralala Water", new Dictionary<string, float> {
             { "Still water", 17f },
             { "Gyaatium", 34f },
             { "Ohio crystal", 39f }
-        }, PotionRarity.Common, 8));
+        }, PotionRarity.Common, 14));
 
         // Rare
         potions.Add(new Potion("Crocodilo Bombardilo Brew", new Dictionary<string, float> {
             { "Still water", 13f },
             { "Crocodiline oil", 36f },
             { "Bomboclat root", 21f }
-        }, PotionRarity.Rare, 10));
+        }, PotionRarity.Rare, 4));
 
         potions.Add(new Potion("Low Taper Fade Elixir", new Dictionary<string, float> {
             { "Still water", 30f },
             { "Mew juice", 35f },
             { "Sigma extract", 30f }
-        }, PotionRarity.Rare, 13));
+        }, PotionRarity.Rare, 10));
 
         potions.Add(new Potion("Cooked Neuron Smoothie", new Dictionary<string, float> {
             { "Still water", 35f },
             { "Neuron dust", 30f },
             { "Ohio crystal", 25f }
-        }, PotionRarity.Rare, 15));
+        }, PotionRarity.Rare, 18));
 
         // Epic
         potions.Add(new Potion("GYATT-O-RATE Ultra Edition", new Dictionary<string, float> {
             { "Gyaatium", 35f },
             { "Mew juice", 30f },
             { "Sigma extract", 30f }
-        }, PotionRarity.Epic, 18));
+        }, PotionRarity.Epic, 8));
 
         potions.Add(new Potion("Ohio Disappearo", new Dictionary<string, float> {
             { "Ohio crystal", 30f },
             { "Toilet core", 35f },
             { "Pre-gta6 essence", 30f }
-        }, PotionRarity.Epic, 20));
+        }, PotionRarity.Epic, 12));
 
         potions.Add(new Potion("Gyatt Gravity Reducer", new Dictionary<string, float> {
             { "Gyaatium", 35f },
             { "Ohio crystal", 30f },
             { "Sigma extract", 30f }
-        }, PotionRarity.Epic, 23));
+        }, PotionRarity.Epic, 20));
 
         // Forbidden
         potions.Add(new Potion("Shrek's Swamp Juice", new Dictionary<string, float> {
@@ -94,14 +94,14 @@ public class OrderReceiver : MonoBehaviour
             { "Toilet core", 25f },
             { "Bomboclat root", 25f },
             { "Skibidite", 25f }
-        }, PotionRarity.Forbidden, 25));
+        }, PotionRarity.Forbidden, 16));
 
         potions.Add(new Potion("GTA 6 Pre-Release Elixir", new Dictionary<string, float> {
             { "Pre-gta6 essence", 25f },
             { "Ohio crystal", 25f },
             { "Sigma extract", 25f },
             { "Neuron dust", 25f }
-        }, PotionRarity.Forbidden, 30));
+        }, PotionRarity.Forbidden, 24));
 
     }
 
@@ -293,6 +293,21 @@ public class OrderReceiver : MonoBehaviour
         }
 
         return null;
+    }
+
+    public List<Potion> GetUnlockedPotionsAtLevel(int level)
+    {
+        List<Potion> unlocked = new();
+
+        foreach (var p in potions)
+        {
+            if (p.unlockLevel == level)
+            {
+                unlocked.Add(p);
+            }
+        }
+
+        return unlocked;
     }
 
 }

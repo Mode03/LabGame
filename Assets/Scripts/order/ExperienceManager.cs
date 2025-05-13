@@ -24,6 +24,9 @@ public class ExperienceManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI experienceText;
     [SerializeField] Image experienceFill;
 
+    [SerializeField] private PotionUnlockUI unlockUI;
+    [SerializeField] private OrderReceiver orderReceiver;
+
     void Start()
     {
         UpdateLevel();
@@ -34,7 +37,7 @@ public class ExperienceManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            AddExperience(10);
+            AddExperience(25);
         }
     }
 
@@ -51,6 +54,13 @@ public class ExperienceManager : MonoBehaviour
         {
             currentLevel++;
             UpdateLevel();
+
+            // Nauji potion'ai
+            var unlockedPotions = orderReceiver.GetUnlockedPotionsAtLevel(currentLevel);
+            foreach (var potion in unlockedPotions)
+            {
+                unlockUI.Show(potion.name, potion.rarity); // parodyk atrakinta potion
+            }
 
             // Start level up sequence ... vfx and sound?
         }
@@ -69,7 +79,7 @@ public class ExperienceManager : MonoBehaviour
         int end = nextLevelsExperience - previousLevelsExperience;
 
         string rankName = GetRankName(currentLevel);
-        int tier = (currentLevel % 5) + 1; // I–V
+        int tier = (currentLevel % 4) + 1; // I–V
 
         levelText.text = $"{rankName} {ToRoman(tier)}";
         experienceText.text = start + " exp / " + end + " exp";
@@ -78,16 +88,16 @@ public class ExperienceManager : MonoBehaviour
 
     private string GetRankName(int level)
     {
-        if (level < 5) return "Intern Sipper";
-        if (level < 10) return "Lab Rat";
-        if (level < 15) return "Mixer Monkey";
-        if (level < 20) return "Potion Rookie";
-        if (level < 25) return "Certified Brewer";
-        if (level < 30) return "Recipe Manipulator";
-        if (level < 35) return "Alchemical Dealer";
-        if (level < 40) return "Meme Distiller";
-        if (level < 45) return "High Rizz Alchemist";
-        if (level < 50) return "Forbidden Mixer";
+        if (level < 4) return "Intern Sipper";
+        if (level < 8) return "Lab Rat";
+        if (level < 12) return "Mixer Monkey";
+        if (level < 16) return "Potion Rookie";
+        if (level < 20) return "Certified Brewer";
+        if (level < 24) return "Recipe Manipulator";
+        if (level < 28) return "Alchemical Dealer";
+        if (level < 32) return "Meme Distiller";
+        if (level < 36) return "High Rizz Alchemist";
+        if (level < 40) return "Forbidden Mixer";
         return "Drinklord";
     }
 
@@ -99,7 +109,6 @@ public class ExperienceManager : MonoBehaviour
             case 2: return "II";
             case 3: return "III";
             case 4: return "IV";
-            case 5: return "V";
             default: return "";
         }
     }
