@@ -5,8 +5,7 @@ using System.Collections.Generic;
 
 public class ShopManager : MonoBehaviour
 {
-   public int coins;
-   public TMP_Text coinUI; 
+   public TMP_Text CoinsTxt; 
    public Spicies[] ShopItems;
    public GameObject[] ShopPanelsSO;
    public ShopTemplate[] ShopPanels;
@@ -16,6 +15,7 @@ public class ShopManager : MonoBehaviour
     public Camera playerCamera;
     public GameObject infoPanel;
     public TextMeshProUGUI infoText;
+    public PlayerDataManager player;
      public void Exit()
     {
         if (shopTrigger != null)
@@ -33,21 +33,36 @@ public class ShopManager : MonoBehaviour
         {
              ShopPanelsSO[i].SetActive(true);
         }
-        coinUI.text = "Coins: " + coins.ToString();
+        CoinsTxt.text = "Coins: " + player.GetCurrency().ToString();
         LoadPanels();
         CheckPurchase();
     }
+    void Update()
+    {
+         if (player != null)
+        {
+            CoinsTxt.text = "Coins: " + player.GetCurrency().ToString();
+        }
+        else
+        {
+            if (player == null)
+            Debug.LogError("PlayerDataManager (player) is null.");
+
+            if (CoinsTxt == null)
+            Debug.LogError("CoinsTxt is null.");
+        }
+    }
    public void AddCoins()
    {
-    coins += 50;
-    coinUI.text = "Coins: " + coins.ToString();
+    player.AddCurrency(50);
+    CoinsTxt.text = "Coins: " + player.GetCurrency().ToString();
     CheckPurchase();
    }
    public void CheckPurchase()
    {
     for(int i = 0; i < ShopItems.Length;i++)
     {
-        if(coins >= ShopItems[i].price)
+        if(player.GetCurrency() >= ShopItems[i].price)
         {
             BuyButton[i].interactable = true;
         }
@@ -59,10 +74,10 @@ public class ShopManager : MonoBehaviour
    }
    public void purchaseItem(int btnNo)
 {
-    if (coins >= ShopItems[btnNo].price)
+    if (player.GetCurrency() >= ShopItems[btnNo].price)
     {
-        coins -= ShopItems[btnNo].price;
-        coinUI.text = "Coins: " + coins.ToString();
+        player.SubtractCurrency(ShopItems[btnNo].price);
+        CoinsTxt.text = "Coins: " + player.GetCurrency().ToString();
         CheckPurchase();
 
         GameObject prefabToSpawn = ShopItems[btnNo].bottle.gameObject;
@@ -86,7 +101,7 @@ public class ShopManager : MonoBehaviour
             if (bottle != null)
             {
                 MixtureIngredient item = ShopItems[btnNo].item;
-                bottle.AddLiquid(item.amount, new List <MixtureIngredient> { item });
+                bottle.AddLiquid(item.amount, new List <MixtureIngredient> {item});
             }
 
             Debug.Log($"Spawned item: {ShopItems[btnNo].bottle.name}");
