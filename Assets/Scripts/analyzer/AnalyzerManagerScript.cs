@@ -20,18 +20,30 @@ public class AnalyzerManagerScript : MonoBehaviour
 
     public Dictionary<int, string> ingredientDescriptions = new Dictionary<int, string>
     {
-        {0, "Still water � No side effects. Just pure hydration. (Boring but safe.)"},
-        {1, "Skibidite � Causes uncontrollable body movement and goofy dancing (Skibidi animation)."},
-        {2, "Sigma Extract � Transforms the user into an 'alpha' mindset. Gains ultimate confidence."},
-        {3, "Gyaatium � Stretches hips and legs for enhanced GYATT proportions. Pure thicc energy."},
-        {4, "Toilet Core � Morphs the user's body into a toilet-shaped anomaly. Skibidi style achieved."},
-        {5, "Neuron Dust � Decreases intelligence. Speech and behavior become progressively more goofy."},
-        {6, "Ohio Crystal � Triggers glitch effects and unpredictable movement. Certified Ohio behavior."},
-        {7, "Mew Juice � Enhances jawline angle. Mewing effect activated. Become the Chad."},
-        {8, "Bomboclat Root � Induces rage outbursts and random yelling. Caribbean fury unlocked."},
-        {9, "Crocodiline Oil � Gives user scaly skin and a deep crocodile voice. Reptilian mode ON."},
-        {10, "Pre-GTA6 Essence � Temporarily hypes user about unreleased content. Enters delusional hype state."}
+        {0, "Still water – No side effects. Just pure hydration. (Boring but safe.)<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#CCCCCC>Common</color>, <color=#4AA6FF>Rare</color>, <color=#B86BFF>Epic</color><br><b><color=#CCCCCC>Included in:</color></b> Goofy Ahh Serum, Sigma Juice Deluxe, Toilet Rage Serum, Tralalero Tralala Water, Crocodilo Bombardilo Brew, Low Taper Fade Elixir, Cooked Neuron Smoothie"},
+
+        {1, "Skibidite – Causes uncontrollable body movement and goofy dancing (Skibidi animation).<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#CCCCCC>Common</color>, <color=#FF3B3B>Forbidden</color><br><b><color=#CCCCCC>Included in:</color></b> Goofy Ahh Serum, Shrek's Swamp Juice"},
+
+        {2, "Sigma Extract – Transforms the user into an 'alpha' mindset. Gains ultimate confidence.<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#CCCCCC>Common</color>, <color=#4AA6FF>Rare</color>, <color=#B86BFF>Epic</color>, <color=#FF3B3B>Forbidden</color><br><b><color=#CCCCCC>Included in:</color></b> Sigma Juice Deluxe, Low Taper Fade Elixir, GYATT-O-RATE Ultra Edition, Gyatt Gravity Reducer, GTA 6 Pre-Release Elixir"},
+
+        {3, "Gyaatium – Stretches hips and legs for enhanced GYATT proportions. Pure thicc energy.<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#CCCCCC>Common</color>, <color=#B86BFF>Epic</color><br><b><color=#CCCCCC>Included in:</color></b> Tralalero Tralala Water, GYATT-O-RATE Ultra Edition, Gyatt Gravity Reducer"},
+
+        {4, "Toilet Core – Morphs the user's body into a toilet-shaped anomaly. Skibidi style achieved.<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#CCCCCC>Common</color>, <color=#B86BFF>Epic</color>, <color=#FF3B3B>Forbidden</color><br><b><color=#CCCCCC>Included in:</color></b> Toilet Rage Serum, Ohio Disappearo, Shrek's Swamp Juice"},
+
+        {5, "Neuron Dust – Decreases intelligence. Speech and behavior become progressively more goofy.<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#CCCCCC>Common</color>, <color=#4AA6FF>Rare</color>, <color=#FF3B3B>Forbidden</color><br><b><color=#CCCCCC>Included in:</color></b> Goofy Ahh Serum, Sigma Juice Deluxe, Cooked Neuron Smoothie, GTA 6 Pre-Release Elixir"},
+
+        {6, "Ohio Crystal – Triggers glitch effects and unpredictable movement. Certified Ohio behavior.<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#CCCCCC>Common</color>, <color=#4AA6FF>Rare</color>, <color=#B86BFF>Epic</color>, <color=#FF3B3B>Forbidden</color><br><b><color=#CCCCCC>Included in:</color></b> Tralalero Tralala Water, Cooked Neuron Smoothie, Ohio Disappearo, Gyatt Gravity Reducer, GTA 6 Pre-Release Elixir"},
+
+        {7, "Mew Juice – Enhances jawline angle. Mewing effect activated. Become the Chad.<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#4AA6FF>Rare</color>, <color=#B86BFF>Epic</color><br><b><color=#CCCCCC>Included in:</color></b> Low Taper Fade Elixir, GYATT-O-RATE Ultra Edition"},
+
+        {8, "Bomboclat Root – Induces rage outbursts and random yelling. Caribbean fury unlocked.<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#CCCCCC>Common</color>, <color=#4AA6FF>Rare</color>, <color=#FF3B3B>Forbidden</color><br><b><color=#CCCCCC>Included in:</color></b> Toilet Rage Serum, Crocodilo Bombardilo Brew, Shrek's Swamp Juice"},
+
+        {9, "Crocodiline Oil – Gives user scaly skin and a deep crocodile voice. Reptilian mode ON.<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#4AA6FF>Rare</color>, <color=#FF3B3B>Forbidden</color><br><b><color=#CCCCCC>Included in:</color></b> Crocodilo Bombardilo Brew, Shrek's Swamp Juice"},
+
+        {10, "Pre-GTA6 Essence – Temporarily hypes user about unreleased content. Enters delusional hype state.<br><b><color=#CCCCCC>Tier Use:</color></b> <color=#B86BFF>Epic</color>, <color=#FF3B3B>Forbidden</color><br><b><color=#CCCCCC>Included in:</color></b> Ohio Disappearo, GTA 6 Pre-Release Elixir"}
     };
+
+
 
     public static AnalyzerManagerScript Instance;
 
