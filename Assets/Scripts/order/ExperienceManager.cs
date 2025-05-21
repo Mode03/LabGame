@@ -118,4 +118,16 @@ public class ExperienceManager : MonoBehaviour
         return currentLevel;
     }
 
+    public int GetTotalExperience()
+    {
+        return totalExperience;
+    }
+
+    public void SetLevelAndXP(int level, int xp)
+    {
+        currentLevel = level;
+        totalExperience = xp;
+        UpdateLevel();
+    }
+
 }

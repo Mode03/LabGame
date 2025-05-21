@@ -43,5 +43,6 @@ public class DoorInteractor : MonoBehaviour
         // Jei nieko nematome arba duru nere, teskto nerodome
         currentDoor = null;
         interactionText.gameObject.SetActive(false);
+        
     }
 }
