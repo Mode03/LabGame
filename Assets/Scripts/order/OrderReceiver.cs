@@ -22,6 +22,23 @@ public class OrderReceiver : MonoBehaviour
     private Potion currentPotion;
 
     public PlayerDataManager player;
+
+    private Dictionary<string, string> ingredientHints = new Dictionary<string, string>
+    {
+        { "Still water", "hydration 100" },
+        { "Neuron dust", "brain go brrrr" },
+        { "Sigma extract", "grindset fuel" },
+        { "Ohio crystal", "strange things happen when you touch it" },
+        { "Toilet core", "found it in public bathroom" },
+        { "Bomboclat root", "makes you shout for no reason" },
+        { "Gyaatium", "high mass-per-volume asset extract" },
+        { "Crocodiline oil", "illegal in 3 states and one swamp" },
+        { "Skibidite", "whispering 'yes yes yes'..." },
+        { "Mew juice", "makes your jawline dangerously defined" },
+        { "Pre-gta6 essence", "older than time itself" }
+    };
+
+
     void Start()
     {
         orderTextUI.SetActive(false);
@@ -168,7 +185,13 @@ public class OrderReceiver : MonoBehaviour
         if (filteredPotions.Count == 0)
         {
             Debug.LogWarning($"No unlocked potions of rarity {selectedRarity} for level {level}! Falling back to common.");
-            filteredPotions = potions.FindAll(p => p.rarity == PotionRarity.Common);
+            filteredPotions = potions.FindAll(p => p.rarity == PotionRarity.Common && p.unlockLevel <= level);
+
+            if (filteredPotions.Count == 0)
+            {
+                Debug.LogError($"Even fallback to common potions failed — no potions available for level {level}!");
+                return;
+            }
         }
 
         Potion selectedPotion = filteredPotions[Random.Range(0, filteredPotions.Count)];
@@ -191,19 +214,33 @@ public class OrderReceiver : MonoBehaviour
 
         string orderText = $"{coloredName}\n";
         int i = 1;
+        int totalIngredients = selectedPotion.ingredients.Count;
+        int hintsToShow = 0;
+
+        // Hintų skaičius priklausomai nuo unlock lygio
+        if (selectedPotion.unlockLevel <= 0) hintsToShow = totalIngredients;
+        else if (selectedPotion.unlockLevel <= 6) hintsToShow = 2;
+        else if (selectedPotion.unlockLevel <= 12) hintsToShow = 1;
+        else hintsToShow = 0;
+
+        int hintsShown = 0;
+
         foreach (var entry in selectedPotion.ingredients)
         {
             string ingredientName = entry.Key;
             float amount = entry.Value;
 
+            int id = IngredientIDResolver.GetIngredientID(ingredientName);
             string displayName;
 
-            // Gauk ID pagal pavadinimą (čia reiks ingredientų ID sąsajos – padarysim toliau)
-            int id = IngredientIDResolver.GetIngredientID(ingredientName);
-
-            if (AnalyzerManagerScript.Instance != null && AnalyzerManagerScript.Instance.isBought[id])
+            //if (AnalyzerManagerScript.Instance != null && AnalyzerManagerScript.Instance.isBought[id])
+            //{
+            //    displayName = ingredientName;
+            //}
+            if (hintsShown < hintsToShow && ingredientHints.ContainsKey(ingredientName))
             {
-                displayName = ingredientName;
+                displayName = $"X{i}: " + ingredientHints[ingredientName];
+                hintsShown++;
             }
             else
             {
@@ -213,6 +250,7 @@ public class OrderReceiver : MonoBehaviour
             orderText += $"- {displayName}: {amount:F0}ml\n";
             i++;
         }
+
 
         currentOrder = orderText;
         orderDisplayUI.text = currentOrder;
