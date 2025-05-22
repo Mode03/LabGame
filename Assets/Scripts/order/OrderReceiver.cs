@@ -44,7 +44,6 @@ public class OrderReceiver : MonoBehaviour
         { "Pre-gta6 essence", "older than time itself" }
     };
 
-
     void Start()
     {
         orderTextUI.SetActive(false);
@@ -54,57 +53,57 @@ public class OrderReceiver : MonoBehaviour
             { "Still water", 35f },
             { "Neuron dust", 12f },
             { "Skibidite", 37f }
-        }, PotionRarity.Common, 0, 50));
+        }, PotionRarity.Common, 0, 40));
 
         potions.Add(new Potion("Sigma Juice Deluxe", new Dictionary<string, float> {
             { "Still water", 24f },
             { "Sigma extract", 13f },
             { "Neuron dust", 36f }
-        }, PotionRarity.Common, 2, 55));
+        }, PotionRarity.Common, 2, 40));
 
         potions.Add(new Potion("Toilet Rage Serum", new Dictionary<string, float> {
             { "Still water", 22f },
             { "Toilet core", 36f },
             { "Bomboclat root", 11f }
-        }, PotionRarity.Common, 6, 40));
+        }, PotionRarity.Common, 6, 50));
 
         potions.Add(new Potion("Tralalero Tralala Water", new Dictionary<string, float> {
             { "Still water", 17f },
             { "Gyaatium", 34f },
             { "Ohio crystal", 39f }
-        }, PotionRarity.Common, 14, 60 ));
+        }, PotionRarity.Common, 14, 60));
 
         // Rare
         potions.Add(new Potion("Crocodilo Bombardilo Brew", new Dictionary<string, float> {
             { "Still water", 13f },
             { "Crocodiline oil", 36f },
             { "Bomboclat root", 21f }
-        }, PotionRarity.Rare, 4, 85));
+        }, PotionRarity.Rare, 4, 70));
 
         potions.Add(new Potion("Low Taper Fade Elixir", new Dictionary<string, float> {
             { "Still water", 30f },
             { "Mew juice", 35f },
             { "Sigma extract", 30f }
-        }, PotionRarity.Rare, 10, 95));
+        }, PotionRarity.Rare, 10, 80));
 
         potions.Add(new Potion("Cooked Neuron Smoothie", new Dictionary<string, float> {
             { "Still water", 35f },
             { "Neuron dust", 30f },
             { "Ohio crystal", 25f }
-        }, PotionRarity.Rare, 18, 100));
+        }, PotionRarity.Rare, 18, 90));
 
         // Epic
         potions.Add(new Potion("GYATT-O-RATE Ultra Edition", new Dictionary<string, float> {
             { "Gyaatium", 35f },
             { "Mew juice", 30f },
             { "Sigma extract", 30f }
-        }, PotionRarity.Epic, 8, 130));
+        }, PotionRarity.Epic, 8, 100));
 
         potions.Add(new Potion("Ohio Disappearo", new Dictionary<string, float> {
             { "Ohio crystal", 30f },
             { "Toilet core", 35f },
             { "Pre-gta6 essence", 30f }
-        }, PotionRarity.Epic, 12, 140));
+        }, PotionRarity.Epic, 12, 110));
 
         potions.Add(new Potion("Gyatt Gravity Reducer", new Dictionary<string, float> {
             { "Gyaatium", 35f },
@@ -118,14 +117,14 @@ public class OrderReceiver : MonoBehaviour
             { "Toilet core", 25f },
             { "Bomboclat root", 25f },
             { "Skibidite", 25f }
-        }, PotionRarity.Forbidden, 16, 420));
+        }, PotionRarity.Forbidden, 16, 200));
 
         potions.Add(new Potion("GTA 6 Pre-Release Elixir", new Dictionary<string, float> {
             { "Pre-gta6 essence", 25f },
             { "Ohio crystal", 25f },
             { "Sigma extract", 25f },
             { "Neuron dust", 25f }
-        }, PotionRarity.Forbidden, 24, 420));
+        }, PotionRarity.Forbidden, 24, 250));
 
     }
 
@@ -257,7 +256,6 @@ public class OrderReceiver : MonoBehaviour
             i++;
         }
 
-
         currentOrder = orderText;
         orderDisplayUI.text = currentOrder;
 
@@ -268,14 +266,14 @@ public class OrderReceiver : MonoBehaviour
     {
         if (!orderActive || currentOrderData.Count == 0)
         {
-            Debug.Log("Nėra aktyvaus užsakymo!");
+            Debug.Log("No active order!");
             return;
         }
 
         Bottle bottle = GetHeldBottle();
         if (bottle == null)
         {
-            Debug.Log("Objektas neturi 'Bottle' skripto!");
+            Debug.Log("Object doesnt have 'Bottle' script!");
             return;
         }
 
@@ -289,7 +287,7 @@ public class OrderReceiver : MonoBehaviour
 
         if (accuracy <= 0.5f)
         {
-            Debug.Log("Užsakymas neatitinka reikalavimų (per mažas tikslumas).");
+            Debug.Log("The order does not meet the requirements (accuracy is too low)");
             ShowFeedbackUI(feedback, accuracy);
             return;
         }
@@ -302,7 +300,7 @@ public class OrderReceiver : MonoBehaviour
 
         ShowFeedbackUI(feedback, accuracy);
 
-        Debug.Log($"Tikslumas: {accuracy:P0} | Coins: {reward} | XP: {exp}");
+        Debug.Log($"Accuracy: {accuracy:P0} | Coins: {reward} | XP: {exp}");
 
         CompleteOrder();
     }
@@ -323,14 +321,14 @@ public class OrderReceiver : MonoBehaviour
 
             if (found == null)
             {
-                // Ingredientas nerastas – už jį 0% (nepridedam)
+                // Ingredientas nerastas – uz ji 0% (nepridedam)
                 continue;
             }
 
-            // Už tai kad yra teisingas ingredientas – pusė vertės
+            // Uz tai kad yra teisingas ingredientas – puse vertes
             float ingredientAccuracy = accuracyPerIngredient * 0.5f;
 
-            // Kiekybinė dalis – papildoma iki kitos pusės vertės
+            // Kiekybine dalis – papildoma iki kitos puses vertes
             float diff = Mathf.Abs(found.amount - orderIngredient.Value);
             float amountAccuracy = 0f;
 
@@ -340,7 +338,7 @@ public class OrderReceiver : MonoBehaviour
             }
             else if (diff <= orderIngredient.Value)
             {
-                // Proporcinis tikslumas (mažėjantis nuo 1 iki 0)
+                // Proporcinis tikslumas (mazejantis nuo 1 iki 0)
                 amountAccuracy = Mathf.Clamp01(1f - (diff / orderIngredient.Value));
             }
 
@@ -349,7 +347,7 @@ public class OrderReceiver : MonoBehaviour
             totalAccuracy += ingredientAccuracy;
         }
 
-        // Papildomų ingredientų bauda
+        // Papildomu ingredientu bauda
         int extraIngredients = bottle.ingredients
             .Count(i => !currentOrderData.Keys
                 .Select(k => k.Trim().ToLower())
