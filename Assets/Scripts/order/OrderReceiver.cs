@@ -4,6 +4,10 @@ using TMPro;
 using NUnit.Framework;
 using System.Collections.Generic;
 using GLTFast.Schema;
+using System.Linq;
+using System.Collections;
+using Unity.Collections;
+using Unity.VisualScripting;
 
 public class OrderReceiver : MonoBehaviour
 {
@@ -22,6 +26,8 @@ public class OrderReceiver : MonoBehaviour
     private Potion currentPotion;
 
     public PlayerDataManager player;
+
+    public FeedbackUI feedbackUI;
 
     private Dictionary<string, string> ingredientHints = new Dictionary<string, string>
     {
@@ -273,15 +279,86 @@ public class OrderReceiver : MonoBehaviour
             return;
         }
 
-        if (IsBottleCorrect(bottle))
+        SubmitPotion(bottle);
+    }
+
+    public void SubmitPotion(Bottle bottle)
+    {
+        float accuracy = EvaluatePotion(bottle);
+        string feedback = GetFeedbackText(accuracy);
+
+        if (accuracy <= 0.5f)
         {
-            Debug.Log($"Atitinka uzsakyma! Tirpalo pavadinimas: {currentPotion.name}");
-            CompleteOrder();
+            Debug.Log("Užsakymas neatitinka reikalavimų (per mažas tikslumas).");
+            ShowFeedbackUI(feedback, accuracy);
+            return;
         }
-        else
+
+        int reward = Mathf.RoundToInt(accuracy * selected.price);
+        int exp = Mathf.RoundToInt(accuracy * GetXPByRarity(currentPotion.rarity));
+
+        player.AddCurrency(reward);
+        ExperienceManager.Instance.AddExperience(exp);
+
+        ShowFeedbackUI(feedback, accuracy);
+
+        Debug.Log($"Tikslumas: {accuracy:P0} | Coins: {reward} | XP: {exp}");
+
+        CompleteOrder();
+    }
+
+    private float EvaluatePotion(Bottle bottle)
+    {
+        if (bottle.ingredients == null || currentOrderData == null)
+            return 0f;
+
+        int requiredCount = currentOrderData.Count;
+        float accuracyPerIngredient = 1f / requiredCount; // pvz. 0.33f jeigu 3 ingridientai
+        float totalAccuracy = 0f;
+
+        foreach (var orderIngredient in currentOrderData)
         {
-            Debug.Log("Neatitinka uzsakymo!");
+            var found = bottle.ingredients.Find(i =>
+                i.name.Trim().ToLower() == orderIngredient.Key.Trim().ToLower());
+
+            if (found == null)
+            {
+                // Ingredientas nerastas – už jį 0% (nepridedam)
+                continue;
+            }
+
+            // Už tai kad yra teisingas ingredientas – pusė vertės
+            float ingredientAccuracy = accuracyPerIngredient * 0.5f;
+
+            // Kiekybinė dalis – papildoma iki kitos pusės vertės
+            float diff = Mathf.Abs(found.amount - orderIngredient.Value);
+            float amountAccuracy = 0f;
+
+            if (diff <= 1f)
+            {
+                amountAccuracy = 1f; // 100% tikslumas
+            }
+            else if (diff <= orderIngredient.Value)
+            {
+                // Proporcinis tikslumas (mažėjantis nuo 1 iki 0)
+                amountAccuracy = Mathf.Clamp01(1f - (diff / orderIngredient.Value));
+            }
+
+            ingredientAccuracy += accuracyPerIngredient * 0.5f * amountAccuracy;
+
+            totalAccuracy += ingredientAccuracy;
         }
+
+        // Papildomų ingredientų bauda
+        int extraIngredients = bottle.ingredients
+            .Count(i => !currentOrderData.Keys
+                .Select(k => k.Trim().ToLower())
+                .Contains(i.name.Trim().ToLower()));
+
+        float penalty = 0.2f * extraIngredients;
+        float finalAccuracy = totalAccuracy - penalty;
+
+        return Mathf.Clamp01(finalAccuracy);
     }
 
     private void CompleteOrder()
@@ -306,46 +383,49 @@ public class OrderReceiver : MonoBehaviour
         Debug.Log($"Gained {expAmount} EXP for {currentPotion.name}!");
     }
 
-    private bool IsBottleCorrect(Bottle bottle)
+    private string GetFeedbackText(float accuracy)
     {
-        if (bottle.ingredients == null || currentOrderData == null)
-            return false;
-
-        int correctCount = 0;
-        int totalIngredients = currentOrderData.Count;
-
-        foreach (var orderIngredient in currentOrderData)
-        {
-            var found = bottle.ingredients.Find(i => i.name.Trim().ToLower() == orderIngredient.Key.Trim().ToLower());
-            if (found == null)
-            {
-                Debug.Log("not found.");
-                continue;
-            }
-            float diff = Mathf.Abs(found.amount - orderIngredient.Value);
-            if (diff <= 5f)
-            {
-                Debug.Log("found.");
-                correctCount++;
-            }
-        }
-        if (correctCount > 0)
-        {
-            float accuracy = (float)correctCount / totalIngredients;
-            int reward = Mathf.RoundToInt(accuracy * selected.price); // ← Use potion.Value for reward base
-
-            player.AddCurrency(reward);
-            Debug.Log($"Matched {correctCount}/{totalIngredients} ingredients | Reward: {reward}");
-
-            CompleteOrder();
-            return true;
-        }
-
-        Debug.Log("No ingredients matched accurately. No reward.");
-        return false;
+        if (accuracy >= 1f) return "[+++] PERFECT BREW\nThis belongs in a museum!";
+        if (accuracy >= 0.9f) return "[+++] LEGENDARY BREW\nYou're cracked!";
+        if (accuracy >= 0.7f) return "[++] NICE MIX\nAlmost top-tier.";
+        if (accuracy >= 0.5f) return "[+] DECENT\nKinda mid but works.";
+        if (accuracy >= 0.3f) return "[~] HMMM\nTechnically a potion.";
+        return "[X] DISASTER\nThis is liquid chaos.";
     }
 
+    private void ShowFeedbackUI(string feedbackText, float accuracy)
+    {
+        int reward = 0;
+        int xp = 0;
 
+        if (accuracy > 0.5f)
+        {
+            reward = Mathf.RoundToInt(accuracy * selected.price);
+            xp = Mathf.RoundToInt(accuracy * GetXPByRarity(currentPotion.rarity));
+        }
+
+        StartCoroutine(ShowFeedbackWithDelay(accuracy, reward, xp, feedbackText));
+
+        Debug.Log($"[Feedback] {feedbackText} ({accuracy * 100f:F0}%)");
+    }
+
+    IEnumerator ShowFeedbackWithDelay(float accuracy, int reward, int xp, string feedback)
+    {
+        yield return new WaitForSeconds(0.2f); // leisti dummy animacijai startuoti
+        feedbackUI.Show(accuracy, reward, xp, feedback);
+    }
+
+    private int GetXPByRarity(PotionRarity rarity)
+    {
+        return rarity switch
+        {
+            PotionRarity.Common => 10,
+            PotionRarity.Rare => 20,
+            PotionRarity.Epic => 40,
+            PotionRarity.Forbidden => 70,
+            _ => 10
+        };
+    }
 
     private Bottle GetHeldBottle()
     {
