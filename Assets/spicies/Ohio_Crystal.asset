@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ohio_Crystal
   m_EditorClassIdentifier: 
   image: {fileID: 2800000, guid: bd478e16d0d591c4eb832efcbef89f6e, type: 3}
-  price: 16
+  price: 5
   item:
     name: Ohio Crystal
     color: {r: 0, g: 1, b: 0.8, a: 0}

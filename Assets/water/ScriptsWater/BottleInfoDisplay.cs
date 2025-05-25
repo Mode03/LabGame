@@ -51,7 +51,7 @@ public class BottleInfoDisplay : MonoBehaviour
         infoPanel.SetActive(true);
 
         string info = $"**Test-Tube**\n";
-        info += $"Amount: {bottle.currentVolume}/{bottle.maxVolume} ml\n";
+        info += $"Amount: {bottle.currentVolume:F2}/{bottle.maxVolume} ml\n";
 
         foreach (var ingredient in bottle.ingredients)
         {

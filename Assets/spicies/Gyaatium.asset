@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gyaatium
   m_EditorClassIdentifier: 
   image: {fileID: 2800000, guid: fb42a824a71e8a24aaf005ebd03e4306, type: 3}
-  price: 13
+  price: 5
   item:
     name: Gyaatium
     color: {r: 1, g: 0.41176474, b: 0.7058824, a: 0}

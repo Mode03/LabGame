@@ -24,22 +24,33 @@ public class ShopTrigger : MonoBehaviour
 
     private void Update()
 {
-    if (IsLookingAtShop())
-    {
-        interactText.gameObject.SetActive(true);
-        interactText.text = "Press [E]";
-
-        if (Input.GetKeyDown(KeyCode.E))
+        if (isShopOpen)
         {
-            isShopOpen = true;
-            ToggleShop(true);
+            // Jei shop atidarytas ir paspaudziamas E - uzdarom
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                ExitShop();
+            }
+        }
+        else
+        {
+            if (IsLookingAtShop())
+            {
+                interactText.gameObject.SetActive(true);
+                interactText.text = "Press [E]";
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    isShopOpen = true;
+                    ToggleShop(true);
+                }
+            }
+            else
+            {
+                interactText.gameObject.SetActive(false);
+            }
         }
     }
-    else
-    {
-        interactText.gameObject.SetActive(false);
-    }
-}
 
     private bool IsLookingAtShop()
 {

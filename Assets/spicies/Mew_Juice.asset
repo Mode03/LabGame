@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Mew_Juice
   m_EditorClassIdentifier: 
   image: {fileID: 2800000, guid: ef88ea145f19bdc41adc4118a41e23b0, type: 3}
-  price: 14
+  price: 5
   item:
     name: Mew Juice
     color: {r: 0.98039216, g: 0.8392157, b: 0.64705884, a: 0}

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class SinkWaterPouring : MonoBehaviour
@@ -8,28 +9,43 @@ public class SinkWaterPouring : MonoBehaviour
     public Transform streamOrigin; // Vieta, is kur bega vanduo
     public KeyCode rotateKey = KeyCode.E; // Mygtukas, kuriuo pasuksi rutuliuka
 
+    public Transform playerCamera;
+    public TMP_Text interactionText;
+
     private bool isPouring = false;
     private GameObject currentStream;
 
     private void Update()
     {
-        // Jei ziuri i rutuliuka ir paspaudi mygtuka, pasukame ji
-        if (IsLookingAtKnob() && Input.GetKeyDown(rotateKey))
+        if (IsLookingAtKnob())
         {
-            ToggleWaterFlow();
+            if (interactionText != null)
+            {
+                interactionText.text = "Press [E]";
+                interactionText.gameObject.SetActive(true);
+            }
+
+            if (Input.GetKeyDown(rotateKey))
+            {
+                ToggleWaterFlow();
+            }
+        }
+        else
+        {
+            if (interactionText != null)
+            {
+                interactionText.gameObject.SetActive(false);
+            }
         }
     }
 
     private bool IsLookingAtKnob()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-
-        if(Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 3f))
         {
             return hit.collider.gameObject == gameObject;
         }
-
         return false;
     }
 
