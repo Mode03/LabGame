@@ -149,7 +149,7 @@ public class DummyCollision : MonoBehaviour
             {
                 dummyAnimator.applyRootMotion = true;
 
-                int randomDeath = 4;//ndom.Range(0, 3);
+                int randomDeath = 6;//ndom.Range(0, 3);
                 dummyAnimator.SetInteger("DeathType", randomDeath);
                 dummyAnimator.SetTrigger("FallTrigger");
 
@@ -274,6 +274,8 @@ public class DummyCollision : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         explosionFire.GetComponent<ParticleSystem>().Play();
+        explosionFire1.GetComponent<ParticleSystem>().Play();
+
     }
 
     IEnumerator ResetToStandAfterDelay(float delay)
