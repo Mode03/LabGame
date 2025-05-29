@@ -23,11 +23,13 @@ public class OrderReceiver : MonoBehaviour
 
     public OrderNPC npcMovement;
 
-    private Potion currentPotion;
+    public Potion currentPotion;
 
     public PlayerDataManager player;
 
     public FeedbackUI feedbackUI;
+    private float lastAccuracy;
+
 
     private Dictionary<string, string> ingredientHints = new Dictionary<string, string>
     {
@@ -283,6 +285,7 @@ public class OrderReceiver : MonoBehaviour
     public void SubmitPotion(Bottle bottle)
     {
         float accuracy = EvaluatePotion(bottle);
+        lastAccuracy = accuracy;
         string feedback = GetFeedbackText(accuracy);
 
         if (accuracy <= 0.5f)
@@ -449,5 +452,6 @@ public class OrderReceiver : MonoBehaviour
 
         return unlocked;
     }
+    public float Accuracy => lastAccuracy;
 
 }
