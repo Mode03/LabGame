@@ -7,6 +7,9 @@ public class DummyCollision : MonoBehaviour
     public OrderReceiver orderReceiver; // Assign via Inspector or Find it in Start()
 
     public GameObject explosionFire;
+    public GameObject sparkles;
+
+
 
     public SphereCollider sphereCollider; // Assign this in the Inspector or via GetComponent
 
@@ -136,7 +139,7 @@ public class DummyCollision : MonoBehaviour
             {
                 dummyAnimator.applyRootMotion = true;
 
-                int randomDeath = 0;//ndom.Range(0, 3);
+                int randomDeath = 3;//ndom.Range(0, 3);
                 dummyAnimator.SetInteger("DeathType", randomDeath);
                 dummyAnimator.SetTrigger("FallTrigger");
 
@@ -168,6 +171,12 @@ public class DummyCollision : MonoBehaviour
                     
                     StartCoroutine(ResetToStandAfterDelay(8f));
                 }
+                else if (randomDeath == 3)
+                {
+                    sparkles.GetComponent<ParticleSystem>().Play();
+                    StartCoroutine(ResetToStandAfterDelay(14f));
+                }
+
             }
             else
             {
@@ -206,7 +215,9 @@ public class DummyCollision : MonoBehaviour
 
     IEnumerator ResetToStandAfterDelay(float delay)
     {
+
         yield return new WaitForSeconds(delay);
+        sparkles.GetComponent<ParticleSystem>().Stop();
 
         if (dummyAnimator != null)
         {
