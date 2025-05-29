@@ -4,6 +4,8 @@ using UnityEngine.Animations.Rigging;
 
 public class DummyCollision : MonoBehaviour
 {
+    public OrderReceiver orderReceiver; // Assign via Inspector or Find it in Start()
+
     public GameObject explosionFire;
 
     public SphereCollider sphereCollider; // Assign this in the Inspector or via GetComponent
@@ -40,6 +42,7 @@ public class DummyCollision : MonoBehaviour
 
     void Start()
     {
+
         if (target != null)
         {
             target.SetActive(false);
@@ -56,7 +59,6 @@ public class DummyCollision : MonoBehaviour
         if (playerIsNearby && !hasGivenItem && Input.GetKeyDown(KeyCode.Q))
         {
             hasGivenItem = true;
-            Debug.Log("Q pressed - Giving item (lifting arm)");
 
             if (moveCoroutine != null) StopCoroutine(moveCoroutine);
             moveCoroutine = StartCoroutine(GiveItemSequence());
@@ -73,7 +75,6 @@ public class DummyCollision : MonoBehaviour
             playerIsNearby = true;
             hasGivenItem = false;
 
-            Debug.Log("ENTER - Extending arm");
             target.SetActive(true);
 
             if (moveCoroutine != null) StopCoroutine(moveCoroutine);
@@ -87,7 +88,6 @@ public class DummyCollision : MonoBehaviour
         {
             playerIsNearby = false;
 
-            Debug.Log("EXIT - Resetting arm");
             if (moveCoroutine != null) StopCoroutine(moveCoroutine);
             moveCoroutine = StartCoroutine(MoveTarget(target, inactivePosition, inactiveRotation));
 
@@ -112,7 +112,6 @@ public class DummyCollision : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        Debug.Log("Auto-reset arm after 3.5 seconds");
 
         if (moveCoroutine != null) StopCoroutine(moveCoroutine);
         moveCoroutine = StartCoroutine(MoveTarget(target, inactivePosition, inactiveRotation));
@@ -128,48 +127,74 @@ public class DummyCollision : MonoBehaviour
         StartCoroutine(ExpandColliderAfterDelay(0f));
         yield return new WaitForSeconds(delay);
 
+        float acc = orderReceiver.Accuracy;
+
+
         if (dummyAnimator != null)
         {
-
-            Debug.Log("Triggering fall animation");
-
-            dummyAnimator.applyRootMotion = true;
-
-            int randomDeath = 1; //Random.Range(0, 3); // returns 1 or 2
-            dummyAnimator.SetInteger("DeathType", randomDeath);
-            dummyAnimator.SetTrigger("FallTrigger");
-
-            if (randomDeath == 1)
+            if (acc < 0.5f)
             {
-                StartCoroutine(ResetToStandAfterDelay(10f));
-                explosionFire.GetComponent<ParticleSystem>().Play();
-                yield return new WaitForSeconds(1.5f);
-                Transform headTransform = transform.Find("metarig_male/hips/spine/chest/upper_chest/neck/head");
-                if (headTransform != null)
+                dummyAnimator.applyRootMotion = true;
+
+                int randomDeath = 0;//ndom.Range(0, 3);
+                dummyAnimator.SetInteger("DeathType", randomDeath);
+                dummyAnimator.SetTrigger("FallTrigger");
+
+                if (randomDeath == 1)
                 {
-                    Vector3 originalScale = headTransform.localScale;
-                    headTransform.localScale = Vector3.zero; // hide head
-                    yield return new WaitForSeconds(8.5f); // wait 3 seconds
-                    headTransform.localScale = originalScale; // show head again
+                    StartCoroutine(ResetToStandAfterDelay(10f));
+                    explosionFire.GetComponent<ParticleSystem>().Play();
+                    yield return new WaitForSeconds(1.5f);
+                    Transform headTransform = transform.Find("metarig_male/hips/spine/chest/upper_chest/neck/head");
+                    if (headTransform != null)
+                    {
+                        Vector3 originalScale = headTransform.localScale;
+                        headTransform.localScale = Vector3.zero; // hide head
+                        yield return new WaitForSeconds(8.5f); // wait 3 seconds
+                        headTransform.localScale = originalScale; // show head again
+
+                    }
 
                 }
-
+                else if (randomDeath == 2)
+                {
+                    // Trigger death1 after 2 seconds, regardless of whether death2 finished
+                    StartCoroutine(SwitchToDeath1AfterDelay(2f));
+                    StartCoroutine(ResetToStandAfterDelay(10f));
+                }
+                else if (randomDeath == 0)
+                {
+                    // Trigger death1 after 2 seconds, regardless of whether death2 finished
+                    
+                    StartCoroutine(ResetToStandAfterDelay(8f));
+                }
             }
-            else if (randomDeath == 2)
+            else
             {
-                // Trigger death1 after 2 seconds, regardless of whether death2 finished
-                StartCoroutine(SwitchToDeath1AfterDelay(2f));
-                StartCoroutine(ResetToStandAfterDelay(10f));
+                string potionName = orderReceiver != null && orderReceiver.currentPotion != null
+                    ? orderReceiver.currentPotion.name
+                    : "Unknown Potion";
+
+                Debug.Log($"Positive reaction triggered for potion: {potionName} (accuracy >= 50%)");
+
+                // Example: Different reactions based on potion name
+                if (potionName == "Goofy Ahh Serum")
+                {
+                    Debug.Log("LOLOLOLOL");
+
+                }
+                else if (potionName == "sds")
+                {
+                    // Trigger fire burst effect
+                }
             }
         }
-
     }
     IEnumerator SwitchToDeath1AfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
 
 
-        Debug.Log("Forcing switch to death1 after delay");
 
         dummyAnimator.SetInteger("DeathType", 1);
         dummyAnimator.SetTrigger("FallTrigger");
@@ -185,7 +210,6 @@ public class DummyCollision : MonoBehaviour
 
         if (dummyAnimator != null)
         {
-            Debug.Log("Resetting to Stand animation");
 
             // Prevent animations from overriding position
             dummyAnimator.applyRootMotion = false;
@@ -195,7 +219,6 @@ public class DummyCollision : MonoBehaviour
         }
 
         // Reset the dummy's transform manually
-        Debug.Log("Resetting dummy transform to default position/rotation/scale");
 
         transform.position = new Vector3(54.515f, 0.234f, 22.621f);
         transform.rotation = new Quaternion(0f, -0.9996081f, 0f, 0.02799418f);
@@ -208,7 +231,6 @@ public class DummyCollision : MonoBehaviour
 
         if (sphereCollider != null)
         {
-            Debug.Log("Expanding SphereCollider radius to 10");
             sphereCollider.radius = 10f;
             StartCoroutine(ShrinkColliderAfterDelay(17f, 1.5f)); // e.g., shrink back to 1 after 5 seconds
 
@@ -220,7 +242,6 @@ public class DummyCollision : MonoBehaviour
 
         if (sphereCollider != null)
         {
-            Debug.Log("Resetting SphereCollider radius to original");
             sphereCollider.radius = originalRadius;
         }
     }
