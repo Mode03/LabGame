@@ -9,12 +9,13 @@ public class DummyCollision : MonoBehaviour
     public MultiAimConstraint HeadConstraint;
 
 
-
+    public GameObject AreaFire;
     public GameObject explosionFire;
     public GameObject explosionFire1;
     public GameObject sparkles;
     public GameObject flameThrower;
     public GameObject bombPrefab;
+    public GameObject toiletPrefab;
 
 
     public SphereCollider sphereCollider; // Assign this in the Inspector or via GetComponent
@@ -149,7 +150,7 @@ public class DummyCollision : MonoBehaviour
             {
                 dummyAnimator.applyRootMotion = true;
 
-                int randomDeath = 6;//ndom.Range(0, 3);
+                int randomDeath = 8;//ndom.Range(0, 3);
                 dummyAnimator.SetInteger("DeathType", randomDeath);
                 dummyAnimator.SetTrigger("FallTrigger");
 
@@ -228,6 +229,28 @@ public class DummyCollision : MonoBehaviour
                     }
                     StartCoroutine(ResetToStandAfterDelay(14f));
                 }
+                else if (randomDeath == 8)
+                {
+                    if (armIKConstraint != null)
+                    {
+                        armIKConstraint.weight = 0f; // Disable IK influence
+                        headAimConstraint.weight = 0f;
+                    }
+                    if (toiletPrefab != null)
+                    {
+                        Vector3 spawnPosition = new Vector3(54.5244102f, -0.09f, 23.355825f);
+                        Quaternion spawnRotation = new Quaternion(0f, -0.7203674f, 0f, 0.69359267f);
+                        Vector3 spawnScale = new Vector3(1.7955f, 1.7955f, 1.7955f);
+
+                        GameObject spawnedToilet = Instantiate(toiletPrefab, spawnPosition, spawnRotation);
+                        spawnedToilet.transform.localScale = spawnScale;
+                        AreaFire.GetComponent<ParticleSystem>().Play();
+                        Destroy(spawnedToilet, 14f);
+
+
+                    }
+                    StartCoroutine(ResetToStandAfterDelay(14f));
+                }
 
 
             }
@@ -284,6 +307,7 @@ public class DummyCollision : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         sparkles.GetComponent<ParticleSystem>().Stop();
+        AreaFire.GetComponent<ParticleSystem>().Stop();
 
         if (dummyAnimator != null)
         {
