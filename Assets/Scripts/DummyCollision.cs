@@ -150,7 +150,7 @@ public class DummyCollision : MonoBehaviour
             {
                 dummyAnimator.applyRootMotion = true;
 
-                int randomDeath = 8;//ndom.Range(0, 3);
+                int randomDeath = 6;//ndom.Range(0, 3);
                 dummyAnimator.SetInteger("DeathType", randomDeath);
                 dummyAnimator.SetTrigger("FallTrigger");
 
