@@ -7,6 +7,8 @@ public class DummyCollision : MonoBehaviour
     public OrderReceiver orderReceiver; // Assign via Inspector or Find it in Start()
     public TwoBoneIKConstraint armIKConstraint; // Assign via Inspector
     public MultiAimConstraint HeadConstraint;
+    public GameObject FloatingText;
+    public GameObject FloatingText2;
 
 
     public GameObject AreaFire;
@@ -55,6 +57,12 @@ public class DummyCollision : MonoBehaviour
     void Start()
     {
 
+        if (FloatingText != null)
+        {
+            FloatingText.SetActive(false);
+            FloatingText2.SetActive(false);
+
+        }
         if (target != null)
         {
             target.SetActive(false);
@@ -146,11 +154,11 @@ public class DummyCollision : MonoBehaviour
 
         if (dummyAnimator != null)
         {
-            if (acc < 0.5f)
+            if (acc <= 0.5f)
             {
                 dummyAnimator.applyRootMotion = true;
 
-                int randomDeath = 6;//ndom.Range(0, 3);
+                int randomDeath = Random.Range(0, 3);
                 dummyAnimator.SetInteger("DeathType", randomDeath);
                 dummyAnimator.SetTrigger("FallTrigger");
 
@@ -166,9 +174,7 @@ public class DummyCollision : MonoBehaviour
                         headTransform.localScale = Vector3.zero; // hide head
                         yield return new WaitForSeconds(8.5f); // wait 3 seconds
                         headTransform.localScale = originalScale; // show head again
-
                     }
-
                 }
                 else if (randomDeath == 2)
                 {
@@ -179,23 +185,44 @@ public class DummyCollision : MonoBehaviour
                 else if (randomDeath == 0)
                 {
                     // Trigger death1 after 2 seconds, regardless of whether death2 finished
-
                     StartCoroutine(ResetToStandAfterDelay(8f));
                 }
-                else if (randomDeath == 3)
+
+                else
                 {
+                    if (FloatingText != null)
+                    {
+                        FloatingText.SetActive(true);
+                    }
+                }
+            }
+            else
+            {
+                string potionName = orderReceiver != null && orderReceiver.currentPotion != null
+                    ? orderReceiver.currentPotion.name
+                    : "Unknown Potion";
+
+                Debug.Log($"Positive reaction triggered for potion: {potionName} (accuracy >= 50%)");
+
+                // Example: Different reactions based on potion name
+                if (potionName == "Goofy Ahh Serum")
+                {
+                    dummyAnimator.applyRootMotion = true;
+                    dummyAnimator.SetInteger("DeathType", 3);
+                    dummyAnimator.SetTrigger("FallTrigger");
                     if (armIKConstraint != null)
                     {
                         armIKConstraint.weight = 0f; // Disable IK influence
                         headAimConstraint.weight = 0f;
                     }
-
-
                     StartCoroutine(ResetToStandAfterDelay(14f));
                     Invoke(nameof(PlaySparkles), 1.7f);
                 }
-                else if (randomDeath == 4)
+                else if (potionName == "Sigma Juice Deluxe")
                 {
+                    dummyAnimator.applyRootMotion = true;
+                    dummyAnimator.SetInteger("DeathType", 4);
+                    dummyAnimator.SetTrigger("FallTrigger");
                     StartCoroutine(SwitchToStrong(2f));
                     if (armIKConstraint != null)
                     {
@@ -206,10 +233,12 @@ public class DummyCollision : MonoBehaviour
                     StartCoroutine(ResetToStandAfterDelay(11f));
                     Invoke(nameof(StopFlameThrower), 6f);
                 }
-                else if (randomDeath == 6)
+                else if (potionName == "Crocodilo Bombardilo Brew")
                 {
+                    dummyAnimator.applyRootMotion = true;
+                    dummyAnimator.SetInteger("DeathType", 6);
+                    dummyAnimator.SetTrigger("FallTrigger");
                     StartCoroutine(SwitchToDeathFront(2f));
-
                     if (armIKConstraint != null)
                     {
                         armIKConstraint.weight = 0f; // Disable IK influence
@@ -225,12 +254,14 @@ public class DummyCollision : MonoBehaviour
                         spawnedBomb.transform.localScale = spawnScale;
                         StartCoroutine(PlayExplosionAfterDelay(4f));
                         Destroy(spawnedBomb, 6f); // Despawns bomb after 5 seconds
-                        
                     }
                     StartCoroutine(ResetToStandAfterDelay(14f));
                 }
-                else if (randomDeath == 8)
+                else if (potionName == "Toilet Rage Serum")
                 {
+                    dummyAnimator.applyRootMotion = true;
+                    dummyAnimator.SetInteger("DeathType", 8);
+                    dummyAnimator.SetTrigger("FallTrigger");
                     if (armIKConstraint != null)
                     {
                         armIKConstraint.weight = 0f; // Disable IK influence
@@ -246,31 +277,72 @@ public class DummyCollision : MonoBehaviour
                         spawnedToilet.transform.localScale = spawnScale;
                         AreaFire.GetComponent<ParticleSystem>().Play();
                         Destroy(spawnedToilet, 14f);
-
-
                     }
                     StartCoroutine(ResetToStandAfterDelay(14f));
                 }
-
-
-            }
-            else
-            {
-                string potionName = orderReceiver != null && orderReceiver.currentPotion != null
-                    ? orderReceiver.currentPotion.name
-                    : "Unknown Potion";
-
-                Debug.Log($"Positive reaction triggered for potion: {potionName} (accuracy >= 50%)");
-
-                // Example: Different reactions based on potion name
-                if (potionName == "Goofy Ahh Serum")
+                else if (potionName == "GTA 6 Pre-Release Elixir")
                 {
-                    Debug.Log("LOLOLOLOL");
-
+                    if (FloatingText != null)
+                    {
+                        FloatingText.SetActive(true);
+                    }
+                    StartCoroutine(ResetToStandAfterDelay(14f));
                 }
-                else if (potionName == "sds")
+                else if (potionName == "Tralalero Tralala Water")
                 {
-                    // Trigger fire burst effect
+                    if (FloatingText != null)
+                    {
+                        FloatingText2.SetActive(true);
+                    }
+                    StartCoroutine(ResetToStandAfterDelay(14f));
+                }
+                else if (potionName == "Low Taper Fade Elixir")
+                {
+                    if (FloatingText != null)
+                    {
+                        FloatingText2.SetActive(true);
+                    }
+                    StartCoroutine(ResetToStandAfterDelay(14f));
+                }
+                else if (potionName == "Cooked Neuron Smoothie")
+                {
+                    if (FloatingText != null)
+                    {
+                        FloatingText2.SetActive(true);
+                    }
+                    StartCoroutine(ResetToStandAfterDelay(14f));
+                }
+                else if (potionName == "GYATT-O-RATE Ultra Edition")
+                {
+                    if (FloatingText != null)
+                    {
+                        FloatingText2.SetActive(true);
+                    }
+                    StartCoroutine(ResetToStandAfterDelay(14f));
+                }
+                else if (potionName == "Ohio Disappearo")
+                {
+                    if (FloatingText != null)
+                    {
+                        FloatingText2.SetActive(true);
+                    }
+                    StartCoroutine(ResetToStandAfterDelay(14f));
+                }
+                else if (potionName == "Gyatt Gravity Reducer")
+                {
+                    if (FloatingText != null)
+                    {
+                        FloatingText2.SetActive(true);
+                    }
+                    StartCoroutine(ResetToStandAfterDelay(14f));
+                }
+                else if (potionName == "Shrek's Swamp Juice")
+                {
+                    if (FloatingText != null)
+                    {
+                        FloatingText2.SetActive(true);
+                    }
+                    StartCoroutine(ResetToStandAfterDelay(14f));
                 }
             }
         }
@@ -305,7 +377,8 @@ public class DummyCollision : MonoBehaviour
     {
 
         yield return new WaitForSeconds(delay);
-
+        FloatingText.SetActive(false);
+        FloatingText2.SetActive(false);
         sparkles.GetComponent<ParticleSystem>().Stop();
         AreaFire.GetComponent<ParticleSystem>().Stop();
 
