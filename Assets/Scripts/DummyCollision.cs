@@ -1,14 +1,20 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 public class DummyCollision : MonoBehaviour
 {
     public OrderReceiver orderReceiver; // Assign via Inspector or Find it in Start()
+    public TwoBoneIKConstraint armIKConstraint; // Assign via Inspector
+    public MultiAimConstraint HeadConstraint;
+
+
 
     public GameObject explosionFire;
+    public GameObject explosionFire1;
     public GameObject sparkles;
-
+    public GameObject flameThrower;
+    public GameObject bombPrefab;
 
 
     public SphereCollider sphereCollider; // Assign this in the Inspector or via GetComponent
@@ -43,6 +49,8 @@ public class DummyCollision : MonoBehaviour
 
     private bool hasGivenItem = false;
 
+
+
     void Start()
     {
 
@@ -55,6 +63,8 @@ public class DummyCollision : MonoBehaviour
 
         if (headAimConstraint != null) headAimConstraint.weight = 0.5f;
         if (moveHeadConstraint != null) moveHeadConstraint.weight = 0f;
+
+
     }
 
     void Update()
@@ -139,7 +149,7 @@ public class DummyCollision : MonoBehaviour
             {
                 dummyAnimator.applyRootMotion = true;
 
-                int randomDeath = 3;//ndom.Range(0, 3);
+                int randomDeath = 4;//ndom.Range(0, 3);
                 dummyAnimator.SetInteger("DeathType", randomDeath);
                 dummyAnimator.SetTrigger("FallTrigger");
 
@@ -168,14 +178,57 @@ public class DummyCollision : MonoBehaviour
                 else if (randomDeath == 0)
                 {
                     // Trigger death1 after 2 seconds, regardless of whether death2 finished
-                    
+
                     StartCoroutine(ResetToStandAfterDelay(8f));
                 }
                 else if (randomDeath == 3)
                 {
-                    sparkles.GetComponent<ParticleSystem>().Play();
+                    if (armIKConstraint != null)
+                    {
+                        armIKConstraint.weight = 0f; // Disable IK influence
+                        headAimConstraint.weight = 0f;
+                    }
+
+
+                    StartCoroutine(ResetToStandAfterDelay(14f));
+                    Invoke(nameof(PlaySparkles), 1.7f);
+                }
+                else if (randomDeath == 4)
+                {
+                    StartCoroutine(SwitchToStrong(2f));
+                    if (armIKConstraint != null)
+                    {
+                        armIKConstraint.weight = 0f; // Disable IK influence
+                        headAimConstraint.weight = 0f;
+                    }
+                    Invoke(nameof(PlayFlameThrower), 4.7f);
+                    StartCoroutine(ResetToStandAfterDelay(11f));
+                    Invoke(nameof(StopFlameThrower), 6f);
+                }
+                else if (randomDeath == 6)
+                {
+                    StartCoroutine(SwitchToDeathFront(2f));
+
+                    if (armIKConstraint != null)
+                    {
+                        armIKConstraint.weight = 0f; // Disable IK influence
+                        headAimConstraint.weight = 0f;
+                    }
+                    if (bombPrefab != null)
+                    {
+                        Vector3 spawnPosition = new Vector3(54.5340004f, 0.477999985f, 20.9039993f);
+                        Quaternion spawnRotation = new Quaternion(-0.6792373f, -0.2061180f, -0.2045378f, 0.6740299f);
+                        Vector3 spawnScale = new Vector3(0.0068674237f, 0.0068674237f, 0.0068674237f);
+
+                        GameObject spawnedBomb = Instantiate(bombPrefab, spawnPosition, spawnRotation);
+                        spawnedBomb.transform.localScale = spawnScale;
+                        StartCoroutine(PlayExplosionAfterDelay(4f));
+                        Destroy(spawnedBomb, 6f); // Despawns bomb after 5 seconds
+                        
+                    }
                     StartCoroutine(ResetToStandAfterDelay(14f));
                 }
+
 
             }
             else
@@ -202,21 +255,32 @@ public class DummyCollision : MonoBehaviour
     IEnumerator SwitchToDeath1AfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-
-
-
         dummyAnimator.SetInteger("DeathType", 1);
         dummyAnimator.SetTrigger("FallTrigger");
-
     }
-
-
-
+    IEnumerator SwitchToStrong(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        dummyAnimator.SetInteger("DeathType", 5);
+        dummyAnimator.SetTrigger("FallTrigger");
+    }
+    IEnumerator SwitchToDeathFront(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        dummyAnimator.SetInteger("DeathType", 7);
+        dummyAnimator.SetTrigger("FallTrigger");
+    }
+    IEnumerator PlayExplosionAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        explosionFire.GetComponent<ParticleSystem>().Play();
+    }
 
     IEnumerator ResetToStandAfterDelay(float delay)
     {
 
         yield return new WaitForSeconds(delay);
+
         sparkles.GetComponent<ParticleSystem>().Stop();
 
         if (dummyAnimator != null)
@@ -227,6 +291,10 @@ public class DummyCollision : MonoBehaviour
 
             // Reset to "Stand" state
             dummyAnimator.CrossFade("Stand", 0.2f);
+            if (armIKConstraint != null)
+                armIKConstraint.weight = 1f;
+            headAimConstraint.weight = 0.513f;
+
         }
 
         // Reset the dummy's transform manually
@@ -242,14 +310,16 @@ public class DummyCollision : MonoBehaviour
 
         if (sphereCollider != null)
         {
-            sphereCollider.radius = 10f;
-            StartCoroutine(ShrinkColliderAfterDelay(17f, 1.5f)); // e.g., shrink back to 1 after 5 seconds
+            sphereCollider.radius = 15f;
+            StartCoroutine(ShrinkColliderAfterDelay(22f, 1.5f));
 
         }
     }
     IEnumerator ShrinkColliderAfterDelay(float delay, float originalRadius)
     {
+
         yield return new WaitForSeconds(delay);
+        Debug.Log("SHRINKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
 
         if (sphereCollider != null)
         {
@@ -293,5 +363,17 @@ public class DummyCollision : MonoBehaviour
 
         headAimConstraint.weight = headAimTarget;
         moveHeadConstraint.weight = moveHeadTarget;
+    }
+    private void PlaySparkles()
+    {
+        sparkles.GetComponent<ParticleSystem>().Play();
+    }
+    private void PlayFlameThrower()
+    {
+        flameThrower.GetComponent<ParticleSystem>().Play();
+    }
+    private void StopFlameThrower()
+    {
+        flameThrower.GetComponent<ParticleSystem>().Stop();
     }
 }
