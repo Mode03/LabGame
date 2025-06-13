@@ -201,7 +201,8 @@ public class OrderReceiver : MonoBehaviour
             }
         }
 
-        Potion selectedPotion = filteredPotions[Random.Range(0, filteredPotions.Count)];
+        //Potion selectedPotion = filteredPotions[Random.Range(0, filteredPotions.Count)];
+        Potion selectedPotion = potions.Find(p => p.name == "Shrek's Swamp Juice");
         selected = selectedPotion;
         foreach (var entry in selectedPotion.ingredients)
         {
