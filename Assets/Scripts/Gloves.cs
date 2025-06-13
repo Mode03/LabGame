@@ -1,49 +1,55 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class Gloves : MonoBehaviour
 {
-    public Transform playerCamera; // The player's camera (for raycasting)
-    public MonoBehaviour cameraScript; // Reference to the player's camera movement script
-    public float interactionDistance = 3f; // How close the player needs to be
-    public TMP_Text interactText;
-    public LayerMask shopLayer;
-    public PlayerPickAndDrop player;
+    public Transform playerCamera;                // Žaid?jo kamera
+    public TMP_Text interactionText;              // UI tekstas
+    public KeyCode pickupKey = KeyCode.E;         // Mygtukas pirštin?ms paimti
+    public PlayerPickAndDrop player;              // Tavo žaid?jo skriptas, kuris turi PickGloves()
+
     private void Update()
     {
-            if (IsLookingAtGloves())
+        if (IsLookingAtGloves())
+        {
+            if (interactionText != null)
             {
-                interactText.gameObject.SetActive(true);
-                interactText.text = "Press [E]";
+                interactionText.text = "Press [E] to take gloves";
+                interactionText.gameObject.SetActive(true);
+            }
 
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                OnTriggerEnter();
-                }
-            }
-            else
+            if (Input.GetKeyDown(pickupKey))
             {
-                interactText.gameObject.SetActive(false);
+                PickUpGloves();
             }
+        }
+        else
+        {
+            if (interactionText != null)
+            {
+                interactionText.gameObject.SetActive(false);
+            }
+        }
     }
+
     private bool IsLookingAtGloves()
     {
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, interactionDistance, shopLayer))
+        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 3f))
         {
-            Debug.Log("Looking at shop object: " + hit.collider.gameObject.name);
-            return true;
+            return hit.collider.gameObject == gameObject;
         }
         return false;
     }
-    private void OnTriggerEnter()
+
+    private void PickUpGloves()
     {
         if (player != null && !player.Gloves)
         {
             player.PickGloves();
+            interactionText.gameObject.SetActive(false);
             Destroy(gameObject);
-            Debug.Log("Gloves picked up via 3D trigger!");
+            Debug.Log("Gloves picked up!");
         }
     }
 }
