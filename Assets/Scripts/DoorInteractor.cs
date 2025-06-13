@@ -21,6 +21,9 @@ public class DoorInteractor : MonoBehaviour
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         RaycastHit hit;
 
+        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * interactDistance, Color.red);
+
+
         if (Physics.Raycast(ray, out hit, interactDistance, interactLayer))
         {
             DoorController door = hit.collider.GetComponent<DoorController>();
