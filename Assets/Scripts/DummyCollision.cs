@@ -52,7 +52,9 @@ public class DummyCollision : MonoBehaviour
 
     private bool hasGivenItem = false;
 
-
+    public GameObject shrekModel;           // Shrek model GameObject (set inactive by default)
+    public GameObject dummyModel;           // Dummy model GameObject (to hide)
+    public ParticleSystem shrekSparkleFX;   // Sparkle VFX played before transformation
 
     void Start()
     {
@@ -338,11 +340,7 @@ public class DummyCollision : MonoBehaviour
                 }
                 else if (potionName == "Shrek's Swamp Juice")
                 {
-                    if (FloatingText != null)
-                    {
-                        FloatingText2.SetActive(true);
-                    }
-                    StartCoroutine(ResetToStandAfterDelay(14f));
+                    StartCoroutine(TransformToShrek());
                 }
             }
         }
@@ -368,9 +366,20 @@ public class DummyCollision : MonoBehaviour
     IEnumerator PlayExplosionAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        explosionFire.GetComponent<ParticleSystem>().Play();
-        explosionFire1.GetComponent<ParticleSystem>().Play();
 
+        if (explosionFire != null)
+        {
+            var ps = explosionFire.GetComponent<ParticleSystem>();
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ps.Play();
+        }
+
+        if (explosionFire1 != null)
+        {
+            var ps1 = explosionFire1.GetComponent<ParticleSystem>();
+            ps1.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ps1.Play();
+        }
     }
 
     IEnumerator ResetToStandAfterDelay(float delay)
@@ -474,5 +483,37 @@ public class DummyCollision : MonoBehaviour
     private void StopFlameThrower()
     {
         flameThrower.GetComponent<ParticleSystem>().Stop();
+    }
+
+    IEnumerator TransformToShrek()
+    {
+        Vector3 hiddenPosition = new Vector3(0, 50, 0);
+
+        Vector3 originalPosition = dummyModel.transform.position;
+        Quaternion originalRotation = dummyModel.transform.rotation;
+
+        dummyAnimator.applyRootMotion = true;
+        dummyAnimator.SetInteger("DeathType", 10);
+        dummyAnimator.SetTrigger("FallTrigger");
+
+        //yield return new WaitForSeconds(2f);
+        StartCoroutine(PlayExplosionAfterDelay(0f));
+        yield return new WaitForSeconds(2.5f);
+
+        dummyModel.transform.position = hiddenPosition; // perkeliam dummy i shrek vieta
+        shrekModel.transform.position = originalPosition; // perkeliam shrek i dummy vieta
+        Invoke(nameof(PlaySparkles), 0.5f);
+        yield return new WaitForSeconds(10f);
+
+        StartCoroutine(PlayExplosionAfterDelay(0f));
+        yield return new WaitForSeconds(1.5f);
+
+        // grazinam dummy ir paslepiam shreka
+        dummyModel.transform.position = originalPosition;
+        dummyModel.transform.rotation = originalRotation;
+
+        shrekModel.transform.position = hiddenPosition;
+
+        StartCoroutine(ResetToStandAfterDelay(6f));
     }
 }
