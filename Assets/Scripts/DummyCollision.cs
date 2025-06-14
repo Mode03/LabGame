@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using static UnityEngine.ParticleSystem;
 
 public class DummyCollision : MonoBehaviour
 {
@@ -52,9 +53,13 @@ public class DummyCollision : MonoBehaviour
 
     private bool hasGivenItem = false;
 
-    public GameObject shrekModel;           // Shrek model GameObject (set inactive by default)
-    public GameObject dummyModel;           // Dummy model GameObject (to hide)
-    public ParticleSystem shrekSparkleFX;   // Sparkle VFX played before transformation
+    public GameObject shrekModel;           // Shrek model
+    public GameObject dummyModel;           // Dummy model 
+
+    public GameObject shark;
+    public GameObject crocodilo;
+    public GameObject shrekFire;
+    public ParticleSystem shrekSmell;
 
     void Start()
     {
@@ -157,6 +162,7 @@ public class DummyCollision : MonoBehaviour
         if (dummyAnimator != null)
         {
             if (acc <= 0.5f)
+            //if(acc > 1)
             {
                 dummyAnimator.applyRootMotion = true;
 
@@ -205,6 +211,9 @@ public class DummyCollision : MonoBehaviour
                     : "Unknown Potion";
 
                 Debug.Log($"Positive reaction triggered for potion: {potionName} (accuracy >= 50%)");
+                //potionName = "Crocodilo Bombardilo Brew";
+                //potionName = "Shrek's Swamp Juice";
+                //potionName = "Tralalero Tralala Water";
 
                 // Example: Different reactions based on potion name
                 if (potionName == "Goofy Ahh Serum")
@@ -237,27 +246,7 @@ public class DummyCollision : MonoBehaviour
                 }
                 else if (potionName == "Crocodilo Bombardilo Brew")
                 {
-                    dummyAnimator.applyRootMotion = true;
-                    dummyAnimator.SetInteger("DeathType", 6);
-                    dummyAnimator.SetTrigger("FallTrigger");
-                    StartCoroutine(SwitchToDeathFront(2f));
-                    if (armIKConstraint != null)
-                    {
-                        armIKConstraint.weight = 0f; // Disable IK influence
-                        headAimConstraint.weight = 0f;
-                    }
-                    if (bombPrefab != null)
-                    {
-                        Vector3 spawnPosition = new Vector3(54.5340004f, 0.477999985f, 20.9039993f);
-                        Quaternion spawnRotation = new Quaternion(-0.6792373f, -0.2061180f, -0.2045378f, 0.6740299f);
-                        Vector3 spawnScale = new Vector3(0.0068674237f, 0.0068674237f, 0.0068674237f);
-
-                        GameObject spawnedBomb = Instantiate(bombPrefab, spawnPosition, spawnRotation);
-                        spawnedBomb.transform.localScale = spawnScale;
-                        StartCoroutine(PlayExplosionAfterDelay(4f));
-                        Destroy(spawnedBomb, 6f); // Despawns bomb after 5 seconds
-                    }
-                    StartCoroutine(ResetToStandAfterDelay(14f));
+                    StartCoroutine(TransformToBombordilo());
                 }
                 else if (potionName == "Toilet Rage Serum")
                 {
@@ -292,11 +281,7 @@ public class DummyCollision : MonoBehaviour
                 }
                 else if (potionName == "Tralalero Tralala Water")
                 {
-                    if (FloatingText != null)
-                    {
-                        FloatingText2.SetActive(true);
-                    }
-                    StartCoroutine(ResetToStandAfterDelay(14f));
+                    StartCoroutine(TransformToShark());
                 }
                 else if (potionName == "Low Taper Fade Elixir")
                 {
@@ -324,9 +309,25 @@ public class DummyCollision : MonoBehaviour
                 }
                 else if (potionName == "Ohio Disappearo")
                 {
-                    if (FloatingText != null)
+                    dummyAnimator.applyRootMotion = true;
+                    dummyAnimator.SetInteger("DeathType", 6);
+                    dummyAnimator.SetTrigger("FallTrigger");
+                    StartCoroutine(SwitchToDeathFront(2f));
+                    if (armIKConstraint != null)
                     {
-                        FloatingText2.SetActive(true);
+                        armIKConstraint.weight = 0f; // Disable IK influence
+                        headAimConstraint.weight = 0f;
+                    }
+                    if (bombPrefab != null)
+                    {
+                        Vector3 spawnPosition = new Vector3(54.5340004f, 0.477999985f, 20.9039993f);
+                        Quaternion spawnRotation = new Quaternion(-0.6792373f, -0.2061180f, -0.2045378f, 0.6740299f);
+                        Vector3 spawnScale = new Vector3(0.0068674237f, 0.0068674237f, 0.0068674237f);
+
+                        GameObject spawnedBomb = Instantiate(bombPrefab, spawnPosition, spawnRotation);
+                        spawnedBomb.transform.localScale = spawnScale;
+                        StartCoroutine(PlayExplosionAfterDelay(4f));
+                        Destroy(spawnedBomb, 6f); // Despawns bomb after 5 seconds
                     }
                     StartCoroutine(ResetToStandAfterDelay(14f));
                 }
@@ -363,22 +364,52 @@ public class DummyCollision : MonoBehaviour
         dummyAnimator.SetInteger("DeathType", 7);
         dummyAnimator.SetTrigger("FallTrigger");
     }
-    IEnumerator PlayExplosionAfterDelay(float delay)
+    IEnumerator PlayExplosionAfterDelay(float delay, float scaleMultiplier = 1f)
     {
         yield return new WaitForSeconds(delay);
 
         if (explosionFire != null)
         {
             var ps = explosionFire.GetComponent<ParticleSystem>();
+            var originalScale = explosionFire.transform.localScale;
+
+            explosionFire.transform.localScale = originalScale * scaleMultiplier;
+
             ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             ps.Play();
+
+            StartCoroutine(ResetParticleScaleAfterDelay(explosionFire, originalScale, ps.main.duration));
         }
 
         if (explosionFire1 != null)
         {
             var ps1 = explosionFire1.GetComponent<ParticleSystem>();
+            var originalScale1 = explosionFire1.transform.localScale;
+
+            explosionFire1.transform.localScale = originalScale1 * scaleMultiplier;
+
             ps1.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             ps1.Play();
+
+            StartCoroutine(ResetParticleScaleAfterDelay(explosionFire1, originalScale1, ps1.main.duration));
+        }
+    }
+
+    IEnumerator ResetParticleScaleAfterDelay(GameObject psObj, Vector3 originalScale, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        psObj.transform.localScale = originalScale;
+    }
+
+    IEnumerator PlayExplosionAfterDelayShrek(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (shrekFire != null)
+        {
+            var ps = shrekFire.GetComponent<ParticleSystem>();
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ps.Play();
         }
     }
 
@@ -497,15 +528,17 @@ public class DummyCollision : MonoBehaviour
         dummyAnimator.SetTrigger("FallTrigger");
 
         //yield return new WaitForSeconds(2f);
-        StartCoroutine(PlayExplosionAfterDelay(0f));
-        yield return new WaitForSeconds(2.5f);
+        StartCoroutine(PlayExplosionAfterDelayShrek(0f));
+        yield return new WaitForSeconds(1.5f);
 
         dummyModel.transform.position = hiddenPosition; // perkeliam dummy i shrek vieta
         shrekModel.transform.position = originalPosition; // perkeliam shrek i dummy vieta
-        Invoke(nameof(PlaySparkles), 0.5f);
+        //Invoke(nameof(PlaySparkles), 0.5f);
+        StartShrekSmell();
+
         yield return new WaitForSeconds(10f);
 
-        StartCoroutine(PlayExplosionAfterDelay(0f));
+        StartCoroutine(PlayExplosionAfterDelayShrek(0f));
         yield return new WaitForSeconds(1.5f);
 
         // grazinam dummy ir paslepiam shreka
@@ -513,6 +546,86 @@ public class DummyCollision : MonoBehaviour
         dummyModel.transform.rotation = originalRotation;
 
         shrekModel.transform.position = hiddenPosition;
+
+        StartCoroutine(ResetToStandAfterDelay(6f));
+    }
+
+    void StartShrekSmell()
+    {
+        shrekSmell.Play();
+        StartCoroutine(StopAfterSeconds(10f));
+    }
+
+    IEnumerator StopAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        shrekSmell.Stop();
+    }
+
+    IEnumerator TransformToShark()
+    {
+        Vector3 hiddenPosition = new Vector3(0, 50, 0);
+
+        Vector3 originalPosition = dummyModel.transform.position;
+        Quaternion originalRotation = dummyModel.transform.rotation;
+
+        dummyAnimator.applyRootMotion = true;
+        dummyAnimator.SetInteger("DeathType", 10);
+        dummyAnimator.SetTrigger("FallTrigger");
+
+        //yield return new WaitForSeconds(2f);
+        StartCoroutine(PlayExplosionAfterDelay(0f));
+        yield return new WaitForSeconds(2.5f);
+
+        dummyModel.transform.position = hiddenPosition; // perkeliam dummy i shark vieta
+        shark.transform.position = originalPosition; // perkeliam shrek i dummy vieta
+        Invoke(nameof(PlaySparkles), 0.5f);
+        yield return new WaitForSeconds(10f);
+
+        StartCoroutine(PlayExplosionAfterDelay(0f));
+        yield return new WaitForSeconds(1.5f);
+
+        // grazinam dummy ir paslepiam shark
+        dummyModel.transform.position = originalPosition;
+        dummyModel.transform.rotation = originalRotation;
+
+        shark.transform.position = hiddenPosition;
+
+        StartCoroutine(ResetToStandAfterDelay(6f));
+    }
+
+    IEnumerator TransformToBombordilo()
+    {
+        Vector3 hiddenPosition = new Vector3(0, 50, 0);
+
+        Vector3 originalPosition = dummyModel.transform.position;
+        Quaternion originalRotation = dummyModel.transform.rotation;
+
+        dummyAnimator.applyRootMotion = true;
+        dummyAnimator.SetInteger("DeathType", 10);
+        dummyAnimator.SetTrigger("FallTrigger");
+
+        //yield return new WaitForSeconds(2f);
+        StartCoroutine(PlayExplosionAfterDelay(0f));
+        yield return new WaitForSeconds(2.5f);
+
+        dummyModel.transform.position = hiddenPosition; // perkeliam dummy i crocodilo vieta
+        crocodilo.transform.position = originalPosition + new Vector3(0, 1f, 0); // perkeliam shrek i dummy vieta
+        //Invoke(nameof(PlaySparkles), 0.5f);
+        StartCoroutine(PlayExplosionAfterDelay(0f, 0.4f));
+        yield return new WaitForSeconds(3f);
+
+        StartCoroutine(PlayExplosionAfterDelay(0f, 0.4f));
+        yield return new WaitForSeconds(3f);
+
+        StartCoroutine(PlayExplosionAfterDelay(0f));
+        yield return new WaitForSeconds(1.5f);
+
+        // grazinam dummy ir paslepiam crocodilo
+        dummyModel.transform.position = originalPosition;
+        dummyModel.transform.rotation = originalRotation;
+
+        crocodilo.transform.position = hiddenPosition;
 
         StartCoroutine(ResetToStandAfterDelay(6f));
     }
